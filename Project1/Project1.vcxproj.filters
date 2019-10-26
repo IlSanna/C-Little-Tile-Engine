@@ -22,12 +22,18 @@
     <ClCompile Include="game.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics.h">
       <Filter>Source Files\headers</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
+      <Filter>Source Files\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
       <Filter>Source Files\headers</Filter>
     </ClInclude>
   </ItemGroup>
