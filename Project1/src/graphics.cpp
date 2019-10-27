@@ -1,7 +1,7 @@
 #include "../headers/graphics.h"
 
 Graphics::Graphics() {
-	SDL_CreateWindowAndRenderer(640, 480, 0, &_window, &_renderer);
+	SDL_CreateWindowAndRenderer(globals::SCREEN_WIDTH, globals::SCREEN_HEIGHT, 0, &_window, &_renderer);
 	SDL_SetWindowTitle(_window, "MyGame");
 }
 

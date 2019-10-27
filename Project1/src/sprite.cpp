@@ -13,7 +13,7 @@ Sprite::Sprite(Graphics & graphics, const std::string &filePath, int sourceX, in
 
 	_spriteSheet = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(filePath));
 	if (!_spriteSheet) {
-		std::cout << "Error loading the image " << std::endl;
+		std::cout << "Error loading the image :"<< filePath << std::endl;
 	}
 }
 
@@ -26,7 +26,8 @@ void Sprite::update() {
 void Sprite::draw(Graphics & graphics, int x, int y) {
 	SDL_Rect destinationRectangle = {
 		 x,  y,
-		_sourceRect.w,_sourceRect.h
+		_sourceRect.w * globals::SPRITE_SCALE,//this will modify the scale
+		_sourceRect.h * globals::SPRITE_SCALE
 	};
 	graphics.blitSurface(_spriteSheet, &_sourceRect, &destinationRectangle);
 }
