@@ -1,8 +1,8 @@
 #pragma once
-#include "../headers/game.h"
-#include "../headers/graphics.h"
-#include "../headers/input.h"
-#include "../headers/sprite.h"
+#include "game.h"
+#include "graphics.h"
+#include "input.h"
+#include "animatedSprite.h"
 
 class Game {
 public:
@@ -13,6 +13,6 @@ private:
 	void draw(Graphics &graphics);
 	void update(float elapsedTime);
 
-	Sprite _player;
+	AnimatedSprite _player;
 };
 

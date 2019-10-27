@@ -1,0 +1,94 @@
+#include "../headers/animatedSprite.h"
+
+AnimatedSprite::AnimatedSprite() {
+}
+
+AnimatedSprite::AnimatedSprite(Graphics &graphics, const std::string &filePath, int sourceX, int sourceY,
+	int width, int height, float posX, float posY, float timeToUpdate) :
+	Sprite(graphics, filePath, sourceX, sourceY, width, height, posX, posY),
+	_frameIndex(0),
+	_timeToUpdate(timeToUpdate),
+	_visible(true),
+	_currentAnimationOnce(false),
+	_currentAnimation(""),
+	_timeElapsed(0) {
+
+}
+
+void AnimatedSprite::playAnimation(std::string animation, bool once) {
+	_currentAnimationOnce = once;
+	if (_currentAnimation != animation) {
+		_currentAnimation = animation;
+		_frameIndex = 0;
+	}
+	else {
+		std::cout << "we are already in this animation: " << animation << std::endl;
+	}
+}
+
+void AnimatedSprite::update(int elapsedTime) {
+	Sprite::update();
+	_timeElapsed += elapsedTime;
+	if (_timeElapsed > _timeToUpdate) {
+		_timeElapsed -= _timeToUpdate;
+		if (_frameIndex < _animations[_currentAnimation].size() - 1) {//if is not the last frame of the anim
+			_frameIndex++;
+		}
+		else {
+			if (_currentAnimationOnce) {//if it need to be played just one frame
+				setVisible(false);
+			}
+			_frameIndex = 0;//start from the first frame
+			animationDone(_currentAnimation);
+		}
+		//std::cout << "frame = " << _frameIndex << std::endl;
+	}
+	
+}
+
+void AnimatedSprite::draw(Graphics &graphics, int x, int y) {
+	if (_visible) {
+		SDL_Rect destinationRectangle = {
+		 x +_offsets[_currentAnimation].x,
+		 y + _offsets[_currentAnimation].y,
+		_sourceRect.w * globals::SPRITE_SCALE,//this will modify the scale
+		_sourceRect.h * globals::SPRITE_SCALE
+		};
+		SDL_Rect sourceRect = _animations[_currentAnimation][_frameIndex];
+		graphics.blitSurface(_spriteSheet, &sourceRect, &destinationRectangle);
+	}
+}
+
+void AnimatedSprite::setupAnimation() {
+	addAnimation(3, 0, 0,"RunLeft", 16, 16, Vector2(0,0));
+}
+
+void AnimatedSprite::addAnimation(int frames, int x, int y, std::string name, int width, int height, Vector2 offset) {
+	std::vector<SDL_Rect> rectangles;
+	for (int i = 0; i < frames; i++) {
+		SDL_Rect newRect = { (i + x)*width, y, width, height };//loop through the sprite sheet row by row
+		rectangles.push_back(newRect);//add it to the vector list
+	}
+	//we add this animation to the list of animations
+	_animations.insert(std::pair<std::string, std::vector<SDL_Rect>>(name, rectangles));
+	//add the relative offset of this animation to the list of offsets
+	_offsets.insert(std::pair<std::string, Vector2>(name, offset));
+}
+
+void AnimatedSprite::stopAnimation() {
+	_frameIndex = 0;
+	animationDone(_currentAnimation);
+}
+
+void AnimatedSprite::resetAnimation() {
+	_animations.clear();
+	_offsets.clear();
+}
+
+void AnimatedSprite::setVisible(bool visible) {
+	_visible = visible;
+}
+
+void AnimatedSprite::animationDone(std::string currentAnimation) {
+
+}

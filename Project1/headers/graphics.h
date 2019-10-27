@@ -5,7 +5,7 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
-#include "../headers/globals.h"
+#include "globals.h"
 
 class Graphics {
 public:

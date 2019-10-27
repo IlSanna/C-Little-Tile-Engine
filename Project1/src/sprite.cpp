@@ -3,7 +3,7 @@
 Sprite::Sprite() {
 }
 
-Sprite::Sprite(Graphics & graphics, const std::string &filePath, int sourceX, int sourceY,
+Sprite::Sprite(Graphics &graphics, const std::string &filePath, int sourceX, int sourceY,
 		int width, int height, float posX, float posY):
 	_x(posX),_y(posY) {
 	_sourceRect.x = sourceX;
