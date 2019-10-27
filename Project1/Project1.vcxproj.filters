@@ -13,28 +13,38 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="graphics.cpp">
+    <ClCompile Include="src\game.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\graphics.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
+    <ClCompile Include="src\input.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="input.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sprite.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphics.h">
+    <ClInclude Include="headers\input.h">
       <Filter>Source Files\headers</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
+    <ClInclude Include="headers\game.h">
       <Filter>Source Files\headers</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
+    <ClInclude Include="headers\graphics.h">
       <Filter>Source Files\headers</Filter>
     </ClInclude>
+    <ClInclude Include="headers\sprite.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="content\sprite\MyChar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SDL2.dll" />
   </ItemGroup>
 </Project>

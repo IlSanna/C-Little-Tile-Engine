@@ -1,6 +1,4 @@
-#ifndef INPUT_H
-#define INPUT_H
-
+#pragma once
 #include <SDL.h>
 #include <map>
 
@@ -21,4 +19,4 @@ private:
 	std::map<SDL_Scancode, bool> _releasedKeys;
 };
 
-#endif // !INPUT_H
+
