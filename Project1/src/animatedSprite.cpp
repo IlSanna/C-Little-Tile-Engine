@@ -21,9 +21,6 @@ void AnimatedSprite::playAnimation(std::string animation, bool once) {
 		_currentAnimation = animation;
 		_frameIndex = 0;
 	}
-	else {
-		//std::cout << "we are already in this animation: " << animation << std::endl;
-	}
 }
 
 void AnimatedSprite::update(float elapsedTime) {
