@@ -20,9 +20,7 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_player = AnimatedSprite(graphics,"content/sprite/MyChar.png",0,0,16,16,100,100,300);
-	_player.setupAnimation();
-	_player.playAnimation("RunLeft");
+	_player = Player(graphics, 100, 100);
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 
@@ -46,6 +44,16 @@ void Game::gameLoop() {
 		if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
 			return;
 		}
+		else if (input.isKeyHeld(SDL_SCANCODE_A)) {
+			_player.moveLeft();
+		}
+		else if (input.isKeyHeld(SDL_SCANCODE_D)) {
+			_player.moveRight();
+		}
+		if (!input.isKeyHeld(SDL_SCANCODE_A) && !input.isKeyHeld(SDL_SCANCODE_D)) {
+			_player.stopMoving();
+		}
+
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		//take the time of the last loop and subtracting it
 		//from current time i get elapsed time
@@ -66,7 +74,7 @@ void Game::update(float elapsedTime) {
 
 void Game::draw(Graphics &graphics) {
 	graphics.clear();
-	_player.draw(graphics, 100, 100);
+	_player.draw(graphics);
 	graphics.display();
 }
 

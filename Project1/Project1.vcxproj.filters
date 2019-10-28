@@ -31,6 +31,9 @@
     <ClCompile Include="src\animatedSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\input.h">
@@ -45,6 +48,7 @@
     <ClInclude Include="headers\sprite.h" />
     <ClInclude Include="headers\globals.h" />
     <ClInclude Include="headers\animatedSprite.h" />
+    <ClInclude Include="headers\player.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\sprite\MyChar.png" />

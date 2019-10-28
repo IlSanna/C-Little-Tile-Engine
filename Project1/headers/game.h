@@ -2,7 +2,7 @@
 #include "game.h"
 #include "graphics.h"
 #include "input.h"
-#include "animatedSprite.h"
+#include "player.h"
 
 class Game {
 public:
@@ -13,6 +13,6 @@ private:
 	void draw(Graphics &graphics);
 	void update(float elapsedTime);
 
-	AnimatedSprite _player;
+	Player _player;
 };
 

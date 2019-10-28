@@ -22,11 +22,11 @@ void AnimatedSprite::playAnimation(std::string animation, bool once) {
 		_frameIndex = 0;
 	}
 	else {
-		std::cout << "we are already in this animation: " << animation << std::endl;
+		//std::cout << "we are already in this animation: " << animation << std::endl;
 	}
 }
 
-void AnimatedSprite::update(int elapsedTime) {
+void AnimatedSprite::update(float elapsedTime) {
 	Sprite::update();
 	_timeElapsed += elapsedTime;
 	if (_timeElapsed > _timeToUpdate) {
@@ -57,10 +57,6 @@ void AnimatedSprite::draw(Graphics &graphics, int x, int y) {
 		SDL_Rect sourceRect = _animations[_currentAnimation][_frameIndex];
 		graphics.blitSurface(_spriteSheet, &sourceRect, &destinationRectangle);
 	}
-}
-
-void AnimatedSprite::setupAnimation() {
-	addAnimation(3, 0, 0,"RunLeft", 16, 16, Vector2(0,0));
 }
 
 void AnimatedSprite::addAnimation(int frames, int x, int y, std::string name, int width, int height, Vector2 offset) {
