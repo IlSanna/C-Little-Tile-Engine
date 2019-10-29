@@ -3,6 +3,7 @@
 #include "graphics.h"
 #include "input.h"
 #include "player.h"
+#include "level.h"
 
 class Game {
 public:
@@ -14,5 +15,6 @@ private:
 	void update(float elapsedTime);
 
 	Player _player;
+	Level _level;
 };
 
