@@ -20,10 +20,10 @@ void Level::draw(Graphics &graphics) {
 	SDL_Rect destinationRectangle;
 	for (int x = 0; x < _size.x / 64; x++) { //divide the map width in tile
 		for (int y = 0; y < _size.y / 64; y++) {
-			destinationRectangle.x = x * 64;
-			destinationRectangle.y = y * 64;
-			destinationRectangle.w = 64;
-			destinationRectangle.h = 64;
+			destinationRectangle.x = x * 64 * globals::SPRITE_SCALE;//* globals::SPRITE_SCALE
+			destinationRectangle.y = y * 64 * globals::SPRITE_SCALE;
+			destinationRectangle.w = 64 * globals::SPRITE_SCALE;
+			destinationRectangle.h = 64 * globals::SPRITE_SCALE;
 			graphics.blitSurface(_backgroundTexture, &sourceRect, &destinationRectangle);
 		}
 	}
