@@ -24,6 +24,16 @@ void Level::draw(Graphics &graphics) {
 	}
 }
 
+std::vector<Rectangle> Level::checkTileCollision(const Rectangle &other) {
+	std::vector<Rectangle> collisions;
+	for (int i = 0; i < _collisionRect.size(); i++) {//loop throug the vector of collision extracted from file
+		if (_collisionRect.at(i).collideWith(other)) {//if other is colliding with one of them
+			collisions.push_back(_collisionRect.at(i));//add it to the collision list
+		}
+	}
+	return collisions;
+}
+
 void Level::extractTileInfo(tinyxml2::XMLElement * pData, SDL_Texture* tileset) {
 	std::string temp = pData->GetText();
 	std::istringstream split(temp);
