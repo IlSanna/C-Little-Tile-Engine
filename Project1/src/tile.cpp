@@ -17,17 +17,17 @@ void Tile::update(float elapsedTime) {
 }
 
 void Tile::draw(Graphics & graphics) {
+	SDL_Rect sourceRect = {
+		_tilesetPosition.x,
+		_tilesetPosition.y,
+		_size.x ,
+		_size.y
+	};
 	SDL_Rect destRect = {
 		_position.x,
 		_position.y,
 		_size.x * globals::SPRITE_SCALE,
 		_size.y * globals::SPRITE_SCALE
-	};
-	SDL_Rect sourceRect = {
-		_position.x,
-		_position.y,
-		_size.x ,
-		_size.y
 	};
 	graphics.blitSurface(_tileset, &sourceRect, &destRect);
 }

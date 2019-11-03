@@ -18,3 +18,4 @@ struct Vector2{
 
 	Vector2 zero() { return Vector2(0, 0); }
 };
+

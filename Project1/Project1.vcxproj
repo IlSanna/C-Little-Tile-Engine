@@ -28,6 +28,7 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\tile.cpp" />
+    <ClCompile Include="src\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\animatedSprite.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="headers\player.h" />
     <ClInclude Include="headers\sprite.h" />
     <ClInclude Include="headers\Tile.h" />
+    <ClInclude Include="headers\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\sprite\MyChar.png" />

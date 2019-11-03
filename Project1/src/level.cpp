@@ -1,36 +1,107 @@
 #include "../headers/level.h"
 
+using namespace tinyxml2;
+
 Level::Level() {
 }
 
-Level::Level(std::string mapName, Vector2 spawnPoint, Graphics &graphics) :
-	_mapName(mapName),
+Level::Level(std::string tilesetPath, std::string mapNameInfo, Vector2 spawnPoint, Graphics &graphics) :
+	_tilesetPath(tilesetPath),
+	_mapNameInfo(mapNameInfo),
 	_spawnPoint(spawnPoint),
-	_size(Vector2(0,0)) {
-	loadMap(_mapName, graphics);
+	_size(Vector2(0,0)) 
+{
+	SDL_Texture* tileset = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(_tilesetPath));
+	loadMapInfo(_mapNameInfo,tileset, graphics);
 }
 
 void Level::update(float elapsedTime) {
 }
 
 void Level::draw(Graphics &graphics) {
-	SDL_Rect sourceRect = {
-		0,0,64,64
-	};
-	SDL_Rect destinationRectangle;
-	for (int x = 0; x < _size.x / 64; x++) { //divide the map width in tile
-		for (int y = 0; y < _size.y / 64; y++) {
-			destinationRectangle.x = x * 64 * globals::SPRITE_SCALE;//* globals::SPRITE_SCALE
-			destinationRectangle.y = y * 64 * globals::SPRITE_SCALE;
-			destinationRectangle.w = 64 * globals::SPRITE_SCALE;
-			destinationRectangle.h = 64 * globals::SPRITE_SCALE;
-			graphics.blitSurface(_backgroundTexture, &sourceRect, &destinationRectangle);
+	for (int i = 0; i < _tileList.size(); i++) {
+		_tileList.at(i).draw(graphics);
+	}
+}
+
+void Level::extractTileInfo(tinyxml2::XMLElement * pData, SDL_Texture* tileset) {
+	std::string temp = pData->GetText();
+	std::istringstream split(temp);
+	std::string line;
+	int tileCounter = 0;
+	while (getline(split, line, ',')) {//read the level gids
+		int currentGid = stoi(line);
+		int xx = 0;
+		int yy = 0;
+		xx = tileCounter % _size.x;
+		xx *= _tileSize.x;
+		yy += _tileSize.y * (tileCounter / _size.x);
+		Vector2 finalTilePosition = Vector2(xx, yy);
+		if (currentGid != 0) {
+			setTile(tileset, currentGid, finalTilePosition);
+			tileCounter++;
+		}
+		else {
+			tileCounter++;
 		}
 	}
 }
 
-void Level::loadMap(std::string mapName, Graphics & graphics) {
-	_backgroundTexture = SDL_CreateTextureFromSurface(graphics.getRenderer(),
-		graphics.loadImage("content/sprite/bkBlue.png"));
-	_size = Vector2(globals::SCREEN_WIDTH * 2, globals::SCREEN_HEIGHT * 2);
+void Level::setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition) {
+	int tilesetWidth, tilesetHeight;
+	SDL_QueryTexture(tileset, NULL, NULL, &tilesetWidth, &tilesetHeight);
+
+	int tsxx = currentGid % (tilesetWidth / _tileSize.x) - 1;
+	tsxx *= _tileSize.x;
+	int tsyy = 0;
+	int amt = (currentGid / (tilesetWidth / _tileSize.x));
+	tsyy = _tileSize.y * amt;
+
+	Vector2 finalTilesetPosition = Vector2(tsxx, tsyy);
+	Tile tile(tileset, Vector2(_tileSize.x, _tileSize.y), finalTilesetPosition, finalTilePosition);
+	_tileList.push_back(tile);
+}
+
+void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics) {
+	XMLDocument doc;
+	doc.LoadFile(mapName.c_str());
+	
+	XMLElement* mapNode = doc.FirstChildElement("map");
+
+	//get map height and width
+	int width, height;
+	mapNode->QueryIntAttribute("width", &width);
+	mapNode->QueryIntAttribute("height", &height);
+	_size = Vector2(width, height);
+
+	//get tilewidth and height
+	int tileWidth, tileHeight;
+	mapNode->QueryIntAttribute("tilewidth", &tileWidth);
+	mapNode->QueryIntAttribute("tileheight", &tileHeight);
+	_tileSize = Vector2(tileWidth, tileHeight);
+
+	////Loading the tilesets
+	//XMLElement* pTileset = mapNode->FirstChildElement("tileset");
+	//if (pTileset) {
+	//	while (pTileset) {//reads until next tileset tag is found
+	//		int firstgid;
+	//		pTileset->QueryIntAttribute("firstgid", &firstgid);
+	//		SDL_Texture* tex = SDL_CreateTextureFromSurface(
+	//			graphics.getRenderer(), graphics.loadImage("content/tileset/PrtCave.png"));//attenzione qui con i percorsi
+	//		this->_tileSets.push_back(Tileset(tex, firstgid));
+	//		pTileset = pTileset->NextSiblingElement("tileset");
+	//	}
+	//}
+
+	//loading the layer and tiles
+	XMLElement* pLayer = mapNode->FirstChildElement("layer");
+	if (pLayer) {
+		while (pLayer) {
+			XMLElement* pData = pLayer->FirstChildElement("data");
+			if (pData) {//load the tiles for this layer
+				extractTileInfo(pData,tileset);//forse cambiero il tileset che vado passando
+			}
+			pLayer = pLayer->NextSiblingElement("layer");
+		}
+	}
 }

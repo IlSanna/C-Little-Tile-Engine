@@ -21,8 +21,8 @@ void Game::gameLoop() {
 	SDL_Event event;
 
 	_player = Player(graphics, 100, 100);
-	_level = Level("map 1", Vector2(100, 100), graphics);
-
+	_level = Level("content/tileset/PrtCave.png","content/maps/Map1.tmx", Vector2(100, 100), graphics);
+	
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 
 	while (true) {
