@@ -15,7 +15,11 @@ public:
 
 	virtual void setupAnimation();
 	virtual void animationDone(std::string currentAnimation);
+	const float getX() const;
+	const float getY() const;
 private:
-	float _dx, dy;//deltaX and deltaY, the change in x and y direction
+	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;
+
+	bool _grounded;
 };
