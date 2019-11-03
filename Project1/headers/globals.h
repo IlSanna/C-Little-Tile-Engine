@@ -1,3 +1,8 @@
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
+
+
 namespace globals {
 	const int SCREEN_WIDTH = 640;
 	const int SCREEN_HEIGHT = 480;
@@ -30,3 +35,4 @@ struct Vector2{
 	Vector2 zero() { return Vector2(0, 0); }
 };
 
+#endif // !GLOBALS_H

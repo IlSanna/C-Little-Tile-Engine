@@ -31,7 +31,7 @@ public:
 	const bool collideWith(const Rectangle &other) {
 		return  getRight() >= other.getLeft() &&
 				getBottom() >= other.getTop() &&
-				other.getRight >= getLeft() &&
+				other.getRight() >= getLeft() &&
 				other.getBottom() >= getTop();
 	}
 	//check if is a valid rectangle

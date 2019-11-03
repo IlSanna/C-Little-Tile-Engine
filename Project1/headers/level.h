@@ -39,6 +39,7 @@ private:
 
 	void extractTileInfo(tinyxml2::XMLElement* pData, SDL_Texture* tileset);
 	void setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition);
+	void loadCollisions(tinyxml2::XMLElement * pObjectGroup);
 	void loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics);
 };
 
