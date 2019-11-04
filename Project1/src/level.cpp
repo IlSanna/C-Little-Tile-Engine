@@ -118,12 +118,12 @@ void Level::loadCollisions(tinyxml2::XMLElement * pObjectGroup) {
 		if (pObject) {
 			while (pObject) {
 				float x, y, width, height;
-
+				//query attribute
 				x = pObject->FloatAttribute("x");
 				y = pObject->FloatAttribute("y");
 				width = pObject->FloatAttribute("width");
 				height = pObject->FloatAttribute("height");
-
+				//add to collision vector
 				_collisionRect.push_back(Rectangle(//ceil will round up the floats
 					std::ceil(x) * globals::SPRITE_SCALE, 
 					std::ceil(y) * globals::SPRITE_SCALE,

@@ -15,6 +15,9 @@ public:
 
 	virtual void setupAnimation();
 	virtual void animationDone(std::string currentAnimation);
+
+	void handleTileCollision(std::vector<Rectangle> &others);
+
 	const float getX() const;
 	const float getY() const;
 private:

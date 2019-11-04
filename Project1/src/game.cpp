@@ -72,6 +72,14 @@ void Game::gameLoop() {
 void Game::update(float elapsedTime) {
 	_player.update(elapsedTime);
 	_level.update(elapsedTime);
+	//collision check
+	std::vector<Rectangle> others;
+	//if the size of the vector others is greater than zero
+	//vector created with the check tile collision functions
+	if ( (others = _level.checkTileCollision(_player.getBoundingBox()) ).size() > 0) {
+		//if we are here means that we are colliding with at least one tile
+		_player.handleTileCollision(others);
+	}
 }
 
 void Game::draw(Graphics &graphics) {

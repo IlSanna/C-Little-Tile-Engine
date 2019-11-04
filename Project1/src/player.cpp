@@ -65,6 +65,32 @@ void Player::setupAnimation() {
 void Player::animationDone(std::string currentAnimation) {
 }
 
+void Player::handleTileCollision(std::vector<Rectangle>& others) {
+	//look for which side is the player colliding with and move accordingly
+	for (int i = 0; i < others.size(); i++) {
+		sides::Side collisionSide = getCollisionSide(others.at(i));
+		if (collisionSide != sides::NONE) {
+			switch (collisionSide) {
+			case sides::TOP:
+				_y = others.at(i).getBottom() + 1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
+				_dy = 0;//reset gravity counter 
+				break;
+			case sides::BOTTOM:
+				_y = others.at(i).getTop() - _boundingBox.getHeight() - 1;//same as above but one pixel and the player height to go up 
+				_dy = 0;
+				_grounded = true;
+				break;
+			case sides::LEFT:
+				_x = others.at(i).getRight() + 1;
+				break;
+			case sides::RIGHT:
+				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;//same as above but on other side
+				break;
+			}
+		}
+	}
+}
+
 const float Player::getX() const {
 	return _x;
 }
