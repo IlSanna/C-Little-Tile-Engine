@@ -25,7 +25,12 @@ Sprite::~Sprite() {
 
 void Sprite::update() {
 	//update BB position
-	_boundingBox = Rectangle(_x, _y, _sourceRect.w * globals::SPRITE_SCALE, _sourceRect.h * globals::SPRITE_SCALE);
+	_boundingBox = Rectangle(
+		_x,
+		_y, 
+		_sourceRect.w * globals::SPRITE_SCALE,
+		_sourceRect.h * globals::SPRITE_SCALE
+	);
 }
 
 void Sprite::draw(Graphics & graphics, int x, int y) {
@@ -46,14 +51,13 @@ const sides::Side Sprite::getCollisionSide(Rectangle &other) const {
 	int amountRight, amountLeft, amountTop, amountBottom;
 	//the lowest amount is the side we are colliding with
 	amountRight = getBoundingBox().getRight() - other.getLeft();
-	amountLeft = other.getLeft() - getBoundingBox().getLeft();
+	amountLeft = other.getRight() - getBoundingBox().getLeft();
 	amountTop = other.getBottom() - getBoundingBox().getTop();
 	amountBottom = getBoundingBox().getBottom() - other.getTop();
-
 	//create an array of all this values
 	int values[4] = { abs(amountRight),abs(amountLeft),abs(amountTop),abs(amountBottom) };
-	//int min = *std::min_element(values,values+3);
-	int min = 0;
+	
+	int min = values[0];
 	for (int i = 0; i < 4; i++) {
 		if(values[i]<min){
 			min = values[i];

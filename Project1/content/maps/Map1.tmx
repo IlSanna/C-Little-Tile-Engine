@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="15">
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="17">
  <tileset firstgid="1" source="level.tsx"/>
  <layer id="2" name="Background" width="20" height="16">
   <data encoding="csv">
@@ -43,16 +43,17 @@
  </layer>
  <objectgroup id="3" name="collisions">
   <object id="1" x="144" y="16.3333" width="16.3333" height="15.3333"/>
-  <object id="2" x="112.667" y="80.3333" width="78.6667" height="14.6667"/>
+  <object id="2" x="112" y="80" width="78.6667" height="14.6667"/>
   <object id="3" x="144" y="63.6667" width="15.3333" height="16.6667"/>
   <object id="4" x="48.6667" y="29.6667" width="32" height="128.333"/>
-  <object id="6" x="46.6667" y="125.667" width="66.6667" height="20.3333"/>
-  <object id="7" x="106.333" y="128.333" width="6.66667" height="56.6667"/>
-  <object id="8" x="128" y="143.667" width="47.3333" height="16.3333"/>
-  <object id="9" x="192" y="143.667" width="16.6667" height="15.6667"/>
+  <object id="6" x="48" y="128" width="64" height="20.3333"/>
+  <object id="7" x="96" y="128" width="16" height="56.6667"/>
+  <object id="8" x="128" y="144" width="47.8333" height="16.3333"/>
+  <object id="9" x="192" y="144" width="16" height="16.1042"/>
   <object id="10" x="207.667" y="127.333" width="33.3333" height="17"/>
   <object id="11" x="172.333" y="18.6667" width="21.3333" height="48"/>
   <object id="12" x="238.667" y="91.6667" width="15.6667" height="51"/>
-  <object id="14" x="113.333" y="179" width="97.3333" height="16"/>
+  <object id="14" x="112" y="176" width="98.1458" height="16"/>
+  <object id="15" x="208" y="160" width="17" height="31.6667"/>
  </objectgroup>
 </map>
