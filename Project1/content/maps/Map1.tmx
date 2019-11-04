@@ -48,7 +48,7 @@
   <object id="4" x="48.6667" y="29.6667" width="32" height="128.333"/>
   <object id="6" x="48" y="128" width="64" height="20.3333"/>
   <object id="7" x="96" y="128" width="16" height="56.6667"/>
-  <object id="8" x="128" y="144" width="47.8333" height="16.3333"/>
+  <object id="8" x="128" y="144" width="48" height="16"/>
   <object id="9" x="192" y="144" width="16" height="16.1042"/>
   <object id="10" x="207.667" y="127.333" width="33.3333" height="17"/>
   <object id="11" x="172.333" y="18.6667" width="21.3333" height="48"/>

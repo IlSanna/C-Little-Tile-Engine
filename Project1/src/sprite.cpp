@@ -8,8 +8,8 @@ Sprite::Sprite(Graphics &graphics, const std::string &filePath, int sourceX, int
 	_x(posX),_y(posY) {
 	_sourceRect.x = sourceX;
 	_sourceRect.y = sourceY;
-	_sourceRect.w = width;
-	_sourceRect.h = height;
+	_sourceRect.w = width-1;//fix strano qwerty
+	_sourceRect.h = height-1;//fix strano qwerty
 
 	//create the sprite image
 	_spriteSheet = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(filePath));
