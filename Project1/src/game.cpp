@@ -20,9 +20,9 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_player = Player(graphics, 150, 100);
 	_level = Level("content/tileset/PrtCave.png","content/maps/Map1.tmx", Vector2(100, 100), graphics);
-	
+	_player = Player(graphics, _level.getPlayerSpawnPoint());
+
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 
 	while (true) {

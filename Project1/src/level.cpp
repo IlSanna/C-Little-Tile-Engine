@@ -15,6 +15,7 @@ Level::Level(std::string tilesetPath, std::string mapNameInfo, Vector2 spawnPoin
 	loadMapInfo(_mapNameInfo,tileset, graphics);
 }
 
+//returns a vector of collision rectangles based on the precompiled level collisions
 std::vector<Rectangle> Level::checkTileCollision(const Rectangle &other) {
 	std::vector<Rectangle> collisions;
 	for (int i = 0; i < _collisionRect.size(); i++) {//loop throug the vector of collision extracted from file
@@ -23,6 +24,10 @@ std::vector<Rectangle> Level::checkTileCollision(const Rectangle &other) {
 		}
 	}
 	return collisions;
+}
+
+const Vector2 Level::getPlayerSpawnPoint() const {
+	return _spawnPoint;
 }
 
 void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics) {
@@ -70,10 +75,13 @@ void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &gra
 	//load collisions
 	XMLElement* pObjectGroup = mapNode->FirstChildElement("objectgroup");
 	if (pObjectGroup) {
-		loadCollisions(pObjectGroup);//rifare la struttura in modo che legga anche altri object group
+		loadTiledObjects(pObjectGroup);
 	}
 }
 
+//parse the pdata element to find the gid number, then
+//based on that it finds the correct world position
+//then it created the tile object
 void Level::extractTileInfo(tinyxml2::XMLElement * pData, SDL_Texture* tileset) {
 	std::string temp = pData->GetText();
 	std::istringstream split(temp);
@@ -97,6 +105,8 @@ void Level::extractTileInfo(tinyxml2::XMLElement * pData, SDL_Texture* tileset) 
 	}
 }
 
+//finds the position of the specific gid on the tileset and 
+//create a tile object with the given world position
 void Level::setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition) {
 	int tilesetWidth, tilesetHeight;
 	SDL_QueryTexture(tileset, NULL, NULL, &tilesetWidth, &tilesetHeight);
@@ -112,30 +122,55 @@ void Level::setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalT
 	_tileList.push_back(tile);
 }
 
-void Level::loadCollisions(tinyxml2::XMLElement * pObjectGroup) {
-	while (pObjectGroup) {//uindi non farlo con un while ma solo con il controllo del nome del object group
-		XMLElement* pObject = pObjectGroup->FirstChildElement("object");
-		if (pObject) {
-			while (pObject) {
-				float x, y, width, height;
-				//query attribute
-				x = pObject->FloatAttribute("x");
-				y = pObject->FloatAttribute("y");
-				width = pObject->FloatAttribute("width");
-				height = pObject->FloatAttribute("height");
-				//add to collision vector
-				_collisionRect.push_back(Rectangle(//ceil will round up the floats
-					std::ceil(x) * globals::SPRITE_SCALE, 
-					std::ceil(y) * globals::SPRITE_SCALE,
-					std::ceil(width) * globals::SPRITE_SCALE,
-					std::ceil(height) * globals::SPRITE_SCALE
-				));
-
-				pObject = pObject->NextSiblingElement("object");
+//parse each objets layer from tiled xml
+//different behaviours depending on the objects names
+void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
+	while (pObjectGroup) {//loop through each object groups
+		const char* name = pObjectGroup->Attribute("name");
+		std::stringstream ss;
+		ss << name;
+		if (ss.str() == "collisions") {//if is collision group
+			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+			if (pObject) {
+				while (pObject) {//loop through each object
+					addCollisionRectangle(pObject);
+					pObject = pObject->NextSiblingElement("object");
+				}
 			}
 		}
-		pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");
+		if (ss.str() == "spawn point") {//if is a spawn point group
+			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+			if (pObject) {
+				while (pObject) {//loop through each object
+					float x = pObject->FloatAttribute("x");
+					float y = pObject->FloatAttribute("y");
+
+					_spawnPoint = Vector2(std::ceil(x) * globals::SPRITE_SCALE,
+										  std::ceil(y) * globals::SPRITE_SCALE
+					);
+					pObject = pObject->NextSiblingElement("object");
+				}
+			}
+		}
+		pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");//go to next object group
 	}
+}
+
+//adds a rectangle to the list of possibles collisions for the player
+void Level::addCollisionRectangle(tinyxml2::XMLElement * pObject) {
+	float x, y, width, height;
+	//query attribute
+	x = pObject->FloatAttribute("x");
+	y = pObject->FloatAttribute("y");
+	width = pObject->FloatAttribute("width");
+	height = pObject->FloatAttribute("height");
+	//add to collision vector
+	_collisionRect.push_back(Rectangle(//ceil will round up the floats
+		std::ceil(x) * globals::SPRITE_SCALE,
+		std::ceil(y) * globals::SPRITE_SCALE,
+		std::ceil(width) * globals::SPRITE_SCALE,
+		std::ceil(height) * globals::SPRITE_SCALE
+	));
 }
 
 void Level::update(float elapsedTime) {

@@ -9,8 +9,8 @@ namespace player_constant {
 Player::Player() {
 }
 
-Player::Player(Graphics &graphics, float x, float y) :
-	AnimatedSprite(graphics, "content/sprite/MyChar.png", 0, 0, 16, 16, x, y, 300),//shouldbe 16
+Player::Player(Graphics &graphics, Vector2 spawnPoint) :
+	AnimatedSprite(graphics, "content/sprite/MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 300),//shouldbe 16
 	_dx(0),
 	_dy(0),
 	_facing(RIGHT),

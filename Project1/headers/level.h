@@ -24,6 +24,7 @@ public:
 	void update(float elapsedTime);
 	void draw(Graphics &graphics);
 	std::vector<Rectangle> checkTileCollision(const Rectangle &other);
+	const Vector2 getPlayerSpawnPoint() const;
 private:
 	std::string _tilesetPath;
 	std::string _mapNameInfo;
@@ -39,7 +40,8 @@ private:
 
 	void extractTileInfo(tinyxml2::XMLElement* pData, SDL_Texture* tileset);
 	void setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition);
-	void loadCollisions(tinyxml2::XMLElement * pObjectGroup);
+	void loadTiledObjects(tinyxml2::XMLElement * pObjectGroup);
+	void addCollisionRectangle(tinyxml2::XMLElement * pObject);
 	void loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics);
 };
 
