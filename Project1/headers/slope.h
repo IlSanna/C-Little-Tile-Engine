@@ -19,7 +19,7 @@ public:
 		return _slope;
 	}
 	//look at the book for explanations
-	const bool collidesWith(const Rectangle &other) const {
+	const bool collideWith(const Rectangle &other) const {
 		return (other.getRight() >= _p2.x &&//case right
 				other.getLeft()  <= _p1.x &&
 				other.getTop()   <= _p2.y &&

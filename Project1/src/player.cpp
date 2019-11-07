@@ -91,6 +91,27 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 	}
 }
 
+void Player::handleSlopeCollision(std::vector<Slope> &others) {
+	for (int i = 0; i < others.size(); i++) {
+		//Calculate where on the slope the player's bottom center is touching
+		//and use y=mx+b to figure out the y position to place him at
+		//First calculate "b" (slope intercept) using one of the points (b = y - mx)
+		int b = (others.at(i).getP1().y - (others.at(i).getSlope() * fabs(others.at(i).getP1().x)));
+
+		//Now get player's center x
+		int centerX = _boundingBox.getCenterX();
+
+		//Now pass that X into the equation y = mx + b (using our newly found b and x) to get the new y position
+		int newY = (others.at(i).getSlope() * centerX) + b - 8; //8 is temporary to fix a problem
+
+		//Re-position the player to the correct "y"
+		if (_grounded) {
+			_y = newY - _boundingBox.getHeight();
+			_grounded = true;
+		}
+	}
+}
+
 const float Player::getX() const {
 	return _x;
 }

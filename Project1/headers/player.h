@@ -1,6 +1,7 @@
 #pragma once
 #include "graphics.h"
 #include "animatedSprite.h"
+#include "slope.h"
 
 class Player : public AnimatedSprite {
 public:
@@ -17,6 +18,7 @@ public:
 	virtual void animationDone(std::string currentAnimation);
 
 	void handleTileCollision(std::vector<Rectangle> &others);
+	void handleSlopeCollision(std::vector<Slope> &others);
 
 	const float getX() const;
 	const float getY() const;

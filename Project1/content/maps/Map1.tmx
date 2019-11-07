@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="30">
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="31">
  <tileset firstgid="1" source="level.tsx"/>
  <layer id="2" name="Background" width="20" height="16">
   <data encoding="csv">
@@ -68,9 +68,12 @@
   <object id="22" x="80.375" y="111.5">
    <polyline points="0,0 31.5,16.375"/>
   </object>
+  <object id="30" x="144" y="128">
+   <polyline points="0,0 16,-16 32,0 48,-16"/>
+  </object>
  </objectgroup>
  <objectgroup color="#00ff00" id="4" name="spawn point">
-  <object id="17" x="152.333" y="46.3333">
+  <object id="17" x="144" y="128">
    <point/>
   </object>
  </objectgroup>

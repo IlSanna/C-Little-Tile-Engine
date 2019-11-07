@@ -26,10 +26,20 @@ std::vector<Rectangle> Level::checkTileCollision(const Rectangle &other) {
 	return collisions;
 }
 
+std::vector<Slope> Level::checkSlopeCollision(const Rectangle & other) {
+	std::vector<Slope> collisions;
+	for (int i = 0; i < _collisionSlopes.size(); i++) {//loop throug the vector of collision extracted from file
+		if (_collisionSlopes.at(i).collideWith(other)) {//if other is colliding with one of them
+			collisions.push_back(_collisionSlopes.at(i));//add it to the collision list
+		}
+	}
+	return collisions;
+}
+
 const Vector2 Level::getPlayerSpawnPoint() const {
 	return _spawnPoint;
 }
-
+//load graphic info
 void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics) {
 	XMLDocument doc;
 	doc.LoadFile(mapName.c_str());
@@ -121,6 +131,7 @@ void Level::setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalT
 	Tile tile(tileset, Vector2(_tileSize.x, _tileSize.y), finalTilesetPosition, finalTilePosition);
 	_tileList.push_back(tile);
 }
+//END of loading graphic informations
 
 //parse each objets layer from tiled xml
 //different behaviours depending on the objects names
@@ -149,6 +160,62 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 										  std::ceil(y) * globals::SPRITE_SCALE
 					);
 					pObject = pObject->NextSiblingElement("object");
+				}
+			}
+		}
+		if (ss.str() == "slopes") {
+			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+			if (pObject) {
+				while (pObject) {//loop through each object
+					float p1X = pObject->FloatAttribute("x");
+					float p1Y = pObject->FloatAttribute("y");
+					Vector2 p = Vector2(std::ceil(p1X), std::ceil(p1Y));
+
+					XMLElement* pLine = pObject->FirstChildElement("polyline");
+					if (pLine) {
+						//read points
+						std::vector<Vector2> points;
+						std::vector<float> singlePoints;//vector with single points
+						std::string temp = pLine->Attribute("points");
+						std::istringstream split(temp);
+						std::string pair;
+						while (getline(split, pair, ' ')) {//split by whitespaces
+							std::istringstream split2(pair);
+							std::string single;
+							while (getline(split2, single, ',')) {//split by commas
+								//THINK ABOUT IF IT'S NEGATIVE MAYBE IS BETTER TO FLOOR INSTEAD OF CEIL
+								singlePoints.push_back(std::ceil(stof(single)));
+							}
+						}
+						for (int i = 0; i < singlePoints.size(); i+=2) {//add the single points to the vector of points
+							Vector2 tempVec = Vector2(singlePoints.at(i), singlePoints.at(i + 1));
+							points.push_back(tempVec);
+						}
+						//create the slopes
+						for (int i = 0; i < points.size() ; i+=2) {
+							_collisionSlopes.push_back(
+								/*Slope(Vector2(p.x + points.at(i < 2 ? i : i - 1).x * globals::SPRITE_SCALE,
+											  p.y + points.at(i < 2 ? i : i - 1).y * globals::SPRITE_SCALE),
+									  Vector2(p.x + points.at(i < 2 ? i + 1 : i).x * globals::SPRITE_SCALE,
+										      p.y + points.at(i < 2 ? i + 1 : i).y * globals::SPRITE_SCALE)
+								)*/
+								
+								Slope(Vector2(p.x + points.at(i).x * globals::SPRITE_SCALE,
+											  p.y + points.at(i).y * globals::SPRITE_SCALE),
+									  Vector2(p.x + points.at( i + 1 ).x * globals::SPRITE_SCALE,
+											  p.y + points.at( i + 1 ).y * globals::SPRITE_SCALE)
+								)
+								
+							);
+						}
+					}//end of p line
+
+					pObject = pObject->NextSiblingElement("object");
+				}
+				for (auto item : _collisionSlopes) {
+					std::cout << "Slope -> ";
+					std::cout << "p1= " << item.getP1().x << "," << item.getP1().y;
+					std::cout << " p2= " << item.getP2().x << "," << item.getP2().y << std::endl;
 				}
 			}
 		}

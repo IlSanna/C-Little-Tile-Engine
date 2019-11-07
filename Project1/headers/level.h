@@ -6,6 +6,7 @@
 #include "tinyxml2.h"
 #include <fstream>
 #include "rectangle.h"
+#include "slope.h"
 
 struct Tileset {
 	SDL_Texture* Texture;
@@ -24,6 +25,7 @@ public:
 	void update(float elapsedTime);
 	void draw(Graphics &graphics);
 	std::vector<Rectangle> checkTileCollision(const Rectangle &other);
+	std::vector<Slope> checkSlopeCollision(const Rectangle &other);
 	const Vector2 getPlayerSpawnPoint() const;
 private:
 	std::string _tilesetPath;
@@ -37,6 +39,7 @@ private:
 	std::vector<Tile> _tileList;
 	std::vector<Tileset> _tileSets;
 	std::vector<Rectangle> _collisionRect;
+	std::vector<Slope> _collisionSlopes;
 
 	void extractTileInfo(tinyxml2::XMLElement* pData, SDL_Texture* tileset);
 	void setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition);
