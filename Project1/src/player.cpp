@@ -16,8 +16,6 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) :
 	_facing(RIGHT),
 	_grounded(false)
 {
-
-	//graphics.loadImage("content/sprite/MyChar.png");
 	setupAnimation();
 	playAnimation("RunLeft");
 }
@@ -35,6 +33,7 @@ void Player::update(float elapsedTime) {
 	_x += _dx * elapsedTime;
 	_y += _dy * elapsedTime;
 	//move by deltay
+
 	AnimatedSprite::update(elapsedTime);
 }
 
@@ -68,23 +67,35 @@ void Player::animationDone(std::string currentAnimation) {
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
 	//look for which side is the player colliding with and move accordingly
 	for (int i = 0; i < others.size(); i++) {
+		std::cout << std::endl;
 		sides::Side collisionSide = getCollisionSide(others.at(i));
 		if (collisionSide != sides::NONE) {
 			switch (collisionSide) {
 			case sides::TOP:
+				std::cout << " TOP ";
+				_dy = 0;//reset gravity counter
 				_y = others.at(i).getBottom() + 1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
-				_dy = 0;//reset gravity counter 
+				if (_grounded) {
+					_dx = 0;
+					_x -= _facing == RIGHT ? 1.0f : -1.0f;
+				}
 				break;
 			case sides::BOTTOM:
-				_y = others.at(i).getTop() - _boundingBox.getHeight() - 1;//same as above but one pixel and the player height to go up 
+				std::cout << " BOTTOM ";
 				_dy = 0;
+				_y = others.at(i).getTop() - _boundingBox.getHeight() - 1;//same as above but one pixel and the player height to go up 
+				
 				_grounded = true;
 				break;
 			case sides::LEFT:
+				std::cout << " LEFT ";
 				_x = others.at(i).getRight() + 1;
+				
 				break;
 			case sides::RIGHT:
+				std::cout << " RIGHT ";
 				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;//same as above but on other side
+				
 				break;
 			}
 		}
@@ -96,6 +107,8 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 		//Calculate where on the slope the player's bottom center is touching
 		//and use y=mx+b to figure out the y position to place him at
 		//First calculate "b" (slope intercept) using one of the points (b = y - mx)
+		//std::cout << others.at(i).getP1().y << " - ( " << others.at(i).getSlope() << " * " << fabs(others.at(i).getP1().x) << std::endl;
+
 		int b = (others.at(i).getP1().y - (others.at(i).getSlope() * fabs(others.at(i).getP1().x)));
 
 		//Now get player's center x
@@ -103,7 +116,7 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 
 		//Now pass that X into the equation y = mx + b (using our newly found b and x) to get the new y position
 		int newY = (others.at(i).getSlope() * centerX) + b - 8; //8 is temporary to fix a problem
-
+		//std::cout << "newY= "<<newY<<" b = "<<b<<" centerX = "<<centerX << std::endl;
 		//Re-position the player to the correct "y"
 		if (_grounded) {
 			_y = newY - _boundingBox.getHeight();

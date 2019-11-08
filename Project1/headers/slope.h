@@ -11,13 +11,14 @@ public:
 	{
 		if (_p1.x - _p2.x != 0) {
 			//calculate the gradient of a line
-			_slope = fabs(_p2.y) - fabs(_p1.y) /
-					 fabs(_p2.x) - fabs(_p1.x);
+			_slope = (fabs(_p2.y) - fabs(_p1.y)) /
+					 (fabs(_p2.x) - fabs(_p1.x));
 		}
 	}
 	const float getSlope() const {
 		return _slope;
 	}
+
 	//look at the book for explanations
 	const bool collideWith(const Rectangle &other) const {
 		return (other.getRight() >= _p2.x &&//case right
@@ -39,7 +40,9 @@ public:
 				other.getLeft()  <= _p2.x &&
 				other.getTop()   <= _p2.y &&
 				other.getBottom() >= _p1.y);
+		
 	}
+
 	const Vector2 getP1() const { return _p1; }
 	const Vector2 getP2() const { return _p2; }
 private:

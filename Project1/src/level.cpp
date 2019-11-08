@@ -184,7 +184,11 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 							std::string single;
 							while (getline(split2, single, ',')) {//split by commas
 								//THINK ABOUT IF IT'S NEGATIVE MAYBE IS BETTER TO FLOOR INSTEAD OF CEIL
-								singlePoints.push_back(std::ceil(stof(single)));
+								//singlePoints.push_back(std::ceil(stof(single)));
+								singlePoints.push_back( stof(single) > 0 ?
+									std::ceil(stof(single)) :
+									std::floor(stof(single))
+								);
 							}
 						}
 						for (int i = 0; i < singlePoints.size(); i+=2) {//add the single points to the vector of points
@@ -192,7 +196,7 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 							points.push_back(tempVec);
 						}
 						//create the slopes
-						for (int i = 0; i < points.size() ; i+=2) {
+						for (int i = 0; i < points.size() -1; i++) {
 							_collisionSlopes.push_back(
 								/*Slope(Vector2(p.x + points.at(i < 2 ? i : i - 1).x * globals::SPRITE_SCALE,
 											  p.y + points.at(i < 2 ? i : i - 1).y * globals::SPRITE_SCALE),
@@ -200,26 +204,25 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 										      p.y + points.at(i < 2 ? i + 1 : i).y * globals::SPRITE_SCALE)
 								)*/
 								
-								Slope(Vector2(p.x + points.at(i).x * globals::SPRITE_SCALE,
-											  p.y + points.at(i).y * globals::SPRITE_SCALE),
-									  Vector2(p.x + points.at( i + 1 ).x * globals::SPRITE_SCALE,
-											  p.y + points.at( i + 1 ).y * globals::SPRITE_SCALE)
+								Slope(Vector2((p.x + points.at(i).x) * globals::SPRITE_SCALE,
+											  (p.y + points.at(i).y) * globals::SPRITE_SCALE),
+									  Vector2((p.x + points.at( i + 1 ).x) * globals::SPRITE_SCALE,
+											  (p.y + points.at( i + 1 ).y) * globals::SPRITE_SCALE)
 								)
-								
 							);
 						}
 					}//end of p line
 
 					pObject = pObject->NextSiblingElement("object");
 				}
-				for (auto item : _collisionSlopes) {
-					std::cout << "Slope -> ";
-					std::cout << "p1= " << item.getP1().x << "," << item.getP1().y;
-					std::cout << " p2= " << item.getP2().x << "," << item.getP2().y << std::endl;
-				}
 			}
 		}
 		pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");//go to next object group
+	}
+	for (auto item : _collisionSlopes) {
+		std::cout << "Slope -> ";
+		std::cout << "p1= " << item.getP1().x << "," << item.getP1().y;
+		std::cout << " p2= " << item.getP2().x << "," << item.getP2().y << std::endl;
 	}
 }
 
