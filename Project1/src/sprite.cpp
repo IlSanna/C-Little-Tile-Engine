@@ -29,7 +29,7 @@ void Sprite::update() {
 		_x +3,
 		_y +1, 
 		(_sourceRect.w -3) * globals::SPRITE_SCALE,
-		(_sourceRect.h -1)* globals::SPRITE_SCALE
+		(_sourceRect.h )* globals::SPRITE_SCALE
 	);
 }
 

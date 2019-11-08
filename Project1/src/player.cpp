@@ -74,7 +74,7 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 			case sides::TOP:
 				std::cout << " TOP ";
 				_dy = 0;//reset gravity counter
-				_y = others.at(i).getBottom() + 1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
+				_y = others.at(i).getBottom() + 1 +1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
 				if (_grounded) {
 					_dx = 0;
 					_x -= _facing == RIGHT ? 1.0f : -1.0f;
@@ -89,12 +89,12 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 				break;
 			case sides::LEFT:
 				std::cout << " LEFT ";
-				_x = others.at(i).getRight() + 1;
+				_x = others.at(i).getRight() + 1 +3;
 				
 				break;
 			case sides::RIGHT:
 				std::cout << " RIGHT ";
-				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;//same as above but on other side
+				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1 -3;//same as above but on other side
 				
 				break;
 			}
@@ -115,7 +115,7 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 		int centerX = _boundingBox.getCenterX();
 
 		//Now pass that X into the equation y = mx + b (using our newly found b and x) to get the new y position
-		int newY = (others.at(i).getSlope() * centerX) + b - 8; //8 is temporary to fix a problem
+		int newY = (others.at(i).getSlope() * centerX) + b -8; //8 is temporary to fix a problem
 		//std::cout << "newY= "<<newY<<" b = "<<b<<" centerX = "<<centerX << std::endl;
 		//Re-position the player to the correct "y"
 		if (_grounded) {
