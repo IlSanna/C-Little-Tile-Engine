@@ -51,6 +51,9 @@ void Game::gameLoop() {
 		else if (input.isKeyHeld(SDL_SCANCODE_D)) {
 			_player.moveRight();
 		}
+		if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
+			_player.jump();
+		}
 		if (!input.isKeyHeld(SDL_SCANCODE_A) && !input.isKeyHeld(SDL_SCANCODE_D)) {
 			_player.stopMoving();
 		}
@@ -75,6 +78,8 @@ void Game::update(float elapsedTime) {
 
 	//collision check
 	std::vector<Rectangle> others;
+	std::vector<Slope> otherSlopes;
+
 	//if the size of the vector others is greater than zero
 	//vector created with the check tile collision functions
 	if ( (others = _level.checkTileCollision(_player.getBoundingBox()) ).size() > 0) {
@@ -83,10 +88,10 @@ void Game::update(float elapsedTime) {
 	}
 
 	//Check slopes
-	std::vector<Slope> otherSlopes;
 	if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleSlopeCollision(otherSlopes);
 	}
+	
 }
 
 void Game::draw(Graphics &graphics) {

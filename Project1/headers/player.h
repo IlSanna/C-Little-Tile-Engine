@@ -13,6 +13,7 @@ public:
 	void moveLeft();
 	void moveRight();
 	void stopMoving();
+	void jump();
 
 	virtual void setupAnimation();
 	virtual void animationDone(std::string currentAnimation);
@@ -26,5 +27,5 @@ private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;
 
-	bool _grounded;
+	bool _grounded = false;
 };

@@ -4,6 +4,7 @@ namespace player_constant {
 	const float WALK_SPEED = 0.2f;
 	const float GRAVITY = 0.002f;
 	const float GRAVITY_CAP = 0.8f;
+	const float JUMP_SPEED = 0.7f;
 }
 
 Player::Player() {
@@ -54,6 +55,14 @@ void Player::stopMoving() {
 	playAnimation(_facing == RIGHT ? "IdleRight" : "IdleLeft");
 }
 
+void Player::jump() {
+	if (_grounded) {
+		_dy = 0;
+		_dy -= player_constant::JUMP_SPEED;
+		_grounded = false;
+	}
+}
+
 void Player::setupAnimation() {
 	addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0));
 	addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0));
@@ -74,7 +83,7 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 			case sides::TOP:
 				std::cout << " TOP ";
 				_dy = 0;//reset gravity counter
-				_y = others.at(i).getBottom() + 1 +1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
+				_y = others.at(i).getBottom() + 1;//+1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
 				if (_grounded) {
 					_dx = 0;
 					_x -= _facing == RIGHT ? 1.0f : -1.0f;
@@ -83,22 +92,23 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 			case sides::BOTTOM:
 				std::cout << " BOTTOM ";
 				_dy = 0;
-				_y = others.at(i).getTop() - _boundingBox.getHeight() - 1;//same as above but one pixel and the player height to go up 
+				_y = others.at(i).getTop() - _boundingBox.getHeight() - 1-1;//same as above but one pixel and the player height to go up 
 				
 				_grounded = true;
 				break;
 			case sides::LEFT:
 				std::cout << " LEFT ";
-				_x = others.at(i).getRight() + 1 +3;
+				_x = others.at(i).getRight() + 1;// +3;
 				
 				break;
 			case sides::RIGHT:
 				std::cout << " RIGHT ";
-				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1 -3;//same as above but on other side
+				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1-3;//same as above but on other side
 				
 				break;
 			}
 		}
+		
 	}
 }
 

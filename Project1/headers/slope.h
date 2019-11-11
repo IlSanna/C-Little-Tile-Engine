@@ -19,7 +19,7 @@ public:
 		return _slope;
 	}
 
-	//check for collisions with the player, return true if all the 16 cases are true
+	//check for collisions with the player, return true if one the 4 cases is true
 	const bool collideWith(const Rectangle &other) const {
 		return (other.getRight() >= _p2.x &&//case right
 				other.getLeft()  <= _p1.x &&
