@@ -63,6 +63,7 @@
     <ClInclude Include="headers\tinyxml2.h" />
     <ClInclude Include="headers\rectangle.h" />
     <ClInclude Include="headers\slope.h" />
+    <ClInclude Include="headers\door.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\sprite\MyChar.png" />

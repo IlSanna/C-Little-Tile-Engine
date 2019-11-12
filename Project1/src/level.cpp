@@ -5,10 +5,10 @@ using namespace tinyxml2;
 Level::Level() {
 }
 
-Level::Level(std::string tilesetPath, std::string mapNameInfo, Vector2 spawnPoint, Graphics &graphics) :
+Level::Level(std::string tilesetPath, std::string mapNameInfo, Graphics &graphics) :
 	_tilesetPath(tilesetPath),
 	_mapNameInfo(mapNameInfo),
-	_spawnPoint(spawnPoint),
+	//_spawnPoint(spawnPoint),
 	_size(Vector2(0,0)) 
 {
 	SDL_Texture* tileset = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(_tilesetPath));
@@ -34,6 +34,16 @@ std::vector<Slope> Level::checkSlopeCollision(const Rectangle & other) {
 		}
 	}
 	return collisions;
+}
+
+std::vector<Door> Level::checkDoorsCollision(const Rectangle &other) {
+	std::vector<Door> others;
+	for (int i = 0; i < _doorList.size(); i++) {//loop throug the vector of collision extracted from file
+		if (_doorList.at(i).collideWith(other)) {//if other is colliding with one of them
+			others.push_back(_doorList.at(i));//add it to the collision list
+		}
+	}
+	return others;
 }
 
 const Vector2 Level::getPlayerSpawnPoint() const {
@@ -217,13 +227,52 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 				}
 			}
 		}
+		if (ss.str() == "doors") {//if is a spawn point group
+			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+			if (pObject) {
+				while (pObject) {//loop through each object
+					float x, y, width, height;
+					//query attribute
+					x = pObject->FloatAttribute("x");
+					y = pObject->FloatAttribute("y");
+					width = pObject->FloatAttribute("width");
+					height = pObject->FloatAttribute("height");
+					//add to collision vector
+					Rectangle rect(//ceil will round up the floats
+						std::ceil(x) * globals::SPRITE_SCALE,
+						std::ceil(y) * globals::SPRITE_SCALE,
+						std::ceil(width) * globals::SPRITE_SCALE,
+						std::ceil(height) * globals::SPRITE_SCALE
+					);
+
+					XMLElement* pProperties = pObject->FirstChildElement("properties");
+					if (pProperties) {
+						while (pProperties) {
+							XMLElement* pProperty = pProperties->FirstChildElement("property");
+							if (pProperty) {
+								while (pProperty) {
+									std::string value = pProperty->Attribute("value");
+									Door door(rect, value);
+									_doorList.push_back(door);
+
+									pProperty = pProperty->NextSiblingElement("property");
+								}
+							}
+							pProperties = pProperties->NextSiblingElement("properties");
+						}
+					}
+
+					pObject = pObject->NextSiblingElement("object");
+				}
+			}
+		}
 		pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");//go to next object group
 	}
-	for (auto item : _collisionSlopes) {
+	/*for (auto item : _collisionSlopes) {
 		std::cout << "Slope -> ";
 		std::cout << "p1= " << item.getP1().x << "," << item.getP1().y;
 		std::cout << " p2= " << item.getP2().x << "," << item.getP2().y << std::endl;
-	}
+	}*/
 }
 
 //adds a rectangle to the list of possibles collisions for the player

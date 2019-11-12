@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "animatedSprite.h"
 #include "slope.h"
+#include "level.h"
 
 class Player : public AnimatedSprite {
 public:
@@ -20,9 +21,11 @@ public:
 
 	void handleTileCollision(std::vector<Rectangle> &others);
 	void handleSlopeCollision(std::vector<Slope> &others);
+	void handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
 
 	const float getX() const;
 	const float getY() const;
+	void setGrounded(bool value);
 private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;

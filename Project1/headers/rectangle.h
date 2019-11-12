@@ -38,6 +38,7 @@ public:
 	const bool isValidRectangle() const {
 		return _x >= 0 && _y >= 0 && _width >= 0 && _height >= 0;
 	}
+	const Rectangle getRect() { return *this; }
 private:
 	int _x, _y, _width, _height;
 };

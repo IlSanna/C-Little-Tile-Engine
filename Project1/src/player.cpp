@@ -98,6 +98,9 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 				break;
 			case sides::LEFT:
 				std::cout << " LEFT ";
+				/*if (!_grounded) {
+					_dy = 0.1f;
+				}*/
 				_x = others.at(i).getRight() + 1;// +3;
 				
 				break;
@@ -135,10 +138,22 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 	}
 }
 
+void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics) {
+	for (int i = 0; i < others.size(); i++) {
+		level = Level("content/tileset/PrtCave.png",others.at(i).getDestination(), graphics);
+		_x = level.getPlayerSpawnPoint().x;
+		_y = level.getPlayerSpawnPoint().y;
+	}
+}
+
 const float Player::getX() const {
 	return _x;
 }
 
 const float Player::getY() const {
 	return _y;
+}
+
+void Player::setGrounded(bool value) {
+	_grounded = value;
 }

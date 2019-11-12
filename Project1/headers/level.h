@@ -7,6 +7,7 @@
 #include <fstream>
 #include "rectangle.h"
 #include "slope.h"
+#include "door.h"
 
 struct Tileset {
 	SDL_Texture* Texture;
@@ -21,11 +22,15 @@ struct Tileset {
 class Level {
 public:
 	Level();
-	Level(std::string mapName,std::string mapNameInfo, Vector2 spawnPoint, Graphics &graphics);
+	Level(std::string tilesetPath,std::string mapNameInfo, Graphics &graphics);
+
 	void update(float elapsedTime);
 	void draw(Graphics &graphics);
+
 	std::vector<Rectangle> checkTileCollision(const Rectangle &other);
 	std::vector<Slope> checkSlopeCollision(const Rectangle &other);
+	std::vector<Door> checkDoorsCollision(const Rectangle &other);
+
 	const Vector2 getPlayerSpawnPoint() const;
 private:
 	std::string _tilesetPath;
@@ -40,6 +45,7 @@ private:
 	std::vector<Tileset> _tileSets;
 	std::vector<Rectangle> _collisionRect;
 	std::vector<Slope> _collisionSlopes;
+	std::vector<Door> _doorList;
 
 	void extractTileInfo(tinyxml2::XMLElement* pData, SDL_Texture* tileset);
 	void setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition);

@@ -20,8 +20,9 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_level = Level("content/tileset/PrtCave.png","content/maps/Map1.tmx", Vector2(100, 100), graphics);
+	_level = Level("content/tileset/PrtCave.png","content/maps/Map1.tmx", graphics);
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
+	_graphics = graphics;
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 
@@ -79,6 +80,7 @@ void Game::update(float elapsedTime) {
 	//collision check
 	std::vector<Rectangle> others;
 	std::vector<Slope> otherSlopes;
+	std::vector<Door> otherDoors;
 
 	//if the size of the vector others is greater than zero
 	//vector created with the check tile collision functions
@@ -90,6 +92,10 @@ void Game::update(float elapsedTime) {
 	//Check slopes
 	if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleSlopeCollision(otherSlopes);
+	}
+	//Check slopes
+	if ((otherDoors = _level.checkDoorsCollision(_player.getBoundingBox())).size() > 0) {
+		_player.handleDoorsCollision(otherDoors,_level,_graphics);
 	}
 	
 }
