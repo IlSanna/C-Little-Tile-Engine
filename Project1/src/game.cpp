@@ -66,7 +66,6 @@ void Game::gameLoop() {
 		//i have to pass to update the elapsed time and this value need to be
 		//bounded between elapsed time and max frame time
 		update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
-		
 		LAST_UPDATE_TIME = CURRENT_TIME_MS; 
 		
 		draw(graphics);

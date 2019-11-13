@@ -26,10 +26,10 @@ Sprite::~Sprite() {
 void Sprite::update() {
 	//update BB position
 	_boundingBox = Rectangle(//magic numbers to make a better BB
-		_x +3,
-		_y +1, 
-		(_sourceRect.w -3) * globals::SPRITE_SCALE,
-		(_sourceRect.h )* globals::SPRITE_SCALE
+		_x,// +3,
+		_y+1,// +1, 
+		(_sourceRect.w -1) * globals::SPRITE_SCALE,//-3
+		(_sourceRect.h -1)* globals::SPRITE_SCALE
 	);
 }
 

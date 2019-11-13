@@ -11,7 +11,7 @@ Player::Player() {
 }
 
 Player::Player(Graphics &graphics, Vector2 spawnPoint) :
-	AnimatedSprite(graphics, "content/sprite/MyChar.png", 0, 0, 16, 16, spawnPoint.x, spawnPoint.y, 300),//shouldbe 16
+	AnimatedSprite(graphics, "content/sprite/simon.png", 0, 0, 16, 32, spawnPoint.x, spawnPoint.y, 300),//shouldbe 16
 	_dx(0),
 	_dy(0),
 	_facing(RIGHT),
@@ -64,10 +64,10 @@ void Player::jump() {
 }
 
 void Player::setupAnimation() {
-	addAnimation(1, 0, 0, "IdleLeft", 16, 16, Vector2(0, 0));
-	addAnimation(1, 0, 16, "IdleRight", 16, 16, Vector2(0, 0));
-	addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0, 0));
-	addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2(0, 0));
+	addAnimation(1, 0, 0, "IdleLeft", 16, 32, Vector2(0, 0));
+	addAnimation(1, 0, 32, "IdleRight", 16, 32, Vector2(0, 0));
+	addAnimation(3, 0, 0, "RunLeft", 16, 32, Vector2(0, 0));
+	addAnimation(3, 0, 32, "RunRight", 16, 32, Vector2(0, 0));
 }
 
 void Player::animationDone(std::string currentAnimation) {
@@ -92,7 +92,7 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 			case sides::BOTTOM:
 				std::cout << " BOTTOM ";
 				_dy = 0;
-				_y = others.at(i).getTop() - _boundingBox.getHeight() - 1-1;//same as above but one pixel and the player height to go up 
+				_y = others.at(i).getTop() - _boundingBox.getHeight() -1;// -1;//same as above but one pixel and the player height to go up 
 				
 				_grounded = true;
 				break;
@@ -106,7 +106,7 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 				break;
 			case sides::RIGHT:
 				std::cout << " RIGHT ";
-				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1-3;//same as above but on other side
+				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;// -3;//same as above but on other side
 				
 				break;
 			}
@@ -140,7 +140,7 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 
 void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics) {
 	for (int i = 0; i < others.size(); i++) {
-		level = Level("content/tileset/PrtCave.png",others.at(i).getDestination(), graphics);
+		level = Level("content/tileset/ClockTowerTileset.png",others.at(i).getDestination(), graphics);
 		_x = level.getPlayerSpawnPoint().x;
 		_y = level.getPlayerSpawnPoint().y;
 	}
