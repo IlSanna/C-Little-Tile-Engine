@@ -20,7 +20,7 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_level = Level("content/tileset/PrtCave.png","content/maps/Map1.tmx", graphics);
+	_level = Level("content/tileset/ClockTowerTileset.png","content/maps/MapN.tmx", graphics);
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
 	_graphics = graphics;
 
@@ -88,12 +88,11 @@ void Game::update(float elapsedTime) {
 		//if we are here means that we are colliding with at least one tile
 		_player.handleTileCollision(others);
 	}
-
 	//Check slopes
 	if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleSlopeCollision(otherSlopes);
 	}
-	//Check slopes
+	//Check doors
 	if ((otherDoors = _level.checkDoorsCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleDoorsCollision(otherDoors,_level,_graphics);
 	}

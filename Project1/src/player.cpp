@@ -128,7 +128,7 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 		int centerX = _boundingBox.getCenterX();
 
 		//Now pass that X into the equation y = mx + b (using our newly found b and x) to get the new y position
-		int newY = (others.at(i).getSlope() * centerX) + b -8; //8 is temporary to fix a problem
+		int newY = (others.at(i).getSlope() * centerX) + b -16; //8 is temporary to fix a problem
 		//std::cout << "newY= "<<newY<<" b = "<<b<<" centerX = "<<centerX << std::endl;
 		//Re-position the player to the correct "y"
 		if (_grounded) {

@@ -38,9 +38,7 @@ void AnimatedSprite::update(float elapsedTime) {
 			_frameIndex = 0;//start from the first frame
 			animationDone(_currentAnimation);
 		}
-		//std::cout << "frame = " << _frameIndex << std::endl;
 	}
-	
 }
 
 void AnimatedSprite::draw(Graphics &graphics, int x, int y) {

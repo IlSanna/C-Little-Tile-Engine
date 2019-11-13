@@ -130,7 +130,7 @@ void Level::extractTileInfo(tinyxml2::XMLElement * pData, SDL_Texture* tileset) 
 void Level::setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition) {
 	int tilesetWidth, tilesetHeight;
 	SDL_QueryTexture(tileset, NULL, NULL, &tilesetWidth, &tilesetHeight);
-
+	//for some reason it dosnt read the last tile column from the tileset
 	int tsxx = currentGid % (tilesetWidth / _tileSize.x) - 1;
 	tsxx *= _tileSize.x;
 	int tsyy = 0;
@@ -150,7 +150,7 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 		const char* name = pObjectGroup->Attribute("name");
 		std::stringstream ss;
 		ss << name;
-		if (ss.str() == "collisions") {//if is collision group
+		if (ss.str() == "CollidableTiles") {//if is collision group
 			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
 			if (pObject) {
 				while (pObject) {//loop through each object
@@ -159,7 +159,7 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 				}
 			}
 		}
-		if (ss.str() == "spawn point") {//if is a spawn point group
+		if (ss.str() == "SpawnPoint") {//if is a spawn point group
 			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
 			if (pObject) {
 				while (pObject) {//loop through each object
@@ -173,7 +173,7 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 				}
 			}
 		}
-		if (ss.str() == "slopes") {
+		if (ss.str() == "Slopes") {
 			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
 			if (pObject) {
 				while (pObject) {//loop through each object
@@ -227,7 +227,7 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 				}
 			}
 		}
-		if (ss.str() == "doors") {//if is a spawn point group
+		if (ss.str() == "Doors") {//if is a spawn point group
 			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
 			if (pObject) {
 				while (pObject) {//loop through each object
@@ -268,11 +268,6 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 		}
 		pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");//go to next object group
 	}
-	/*for (auto item : _collisionSlopes) {
-		std::cout << "Slope -> ";
-		std::cout << "p1= " << item.getP1().x << "," << item.getP1().y;
-		std::cout << " p2= " << item.getP2().x << "," << item.getP2().y << std::endl;
-	}*/
 }
 
 //adds a rectangle to the list of possibles collisions for the player
