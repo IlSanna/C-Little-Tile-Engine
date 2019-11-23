@@ -20,7 +20,7 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_level = Level("content/tileset/ClockTowerTileset.png","content/maps/MapN.tmx", graphics);
+	_level = Level("content/tileset/ClockTowerTileset.png","content/maps/MapN2.tmx", graphics);
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
 	_graphics = graphics;
 
@@ -78,14 +78,29 @@ void Game::update(float elapsedTime) {
 
 	//collision check
 	std::vector<Rectangle> others;
+	std::vector<Rectangle> othersSlopeRect;
 	std::vector<Slope> otherSlopes;
 	std::vector<Door> otherDoors;
 
 	//if the size of the vector others is greater than zero
 	//vector created with the check tile collision functions
-	if ( (others = _level.checkTileCollision(_player.getBoundingBox()) ).size() > 0) {
-		//if we are here means that we are colliding with at least one tile
-		_player.handleTileCollision(others);
+	//if ( (others = _level.checkTileCollision(_player.getBoundingBox()) ).size() > 0) {
+	//	//if we are here means that we are colliding with at least one tile
+	//	_player.handleTileCollision(others);
+	//}
+	//if ((othersSlopeRect = _level.checkSlopeRectCollision(_player.getBoundingBox())).size() > 0) {
+	//	//if we are here means that we are colliding with at least one tile
+	//	_player.handleSlopeRectCollision(othersSlopeRect);
+	//}
+	if ((othersSlopeRect = _level.checkSlopeRectCollision(_player.getBoundingBox())).size() > 0 ||
+		(others = _level.checkTileCollision(_player.getBoundingBox())).size() > 0) {
+		//im colliding with something
+		if ((others = _level.checkTileCollision(_player.getBoundingBox())).size() > 0) {
+			_player.handleTileCollision(others);
+		}
+		else {
+			_player.handleSlopeRectCollision(othersSlopeRect);
+		}
 	}
 	//Check slopes
 	if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {

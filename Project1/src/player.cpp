@@ -57,6 +57,7 @@ void Player::stopMoving() {
 
 void Player::jump() {
 	if (_grounded) {
+		std::cout << "jump" << std::endl;
 		_dy = 0;
 		_dy -= player_constant::JUMP_SPEED;
 		_grounded = false;
@@ -81,6 +82,45 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 		if (collisionSide != sides::NONE) {
 			switch (collisionSide) {
 			case sides::TOP:
+				//std::cout << " TOP ";
+				_dy = 0;//reset gravity counter
+				_y = others.at(i).getBottom() + 1;//+1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
+				if (_grounded) {
+					_dx = 0;
+					_x -= _facing == RIGHT ? 1.0f : -1.0f;
+				}
+				break;
+			case sides::BOTTOM:
+				std::cout << " BOTTOM TILE";
+				_dy = 0;
+				_y = others.at(i).getTop() - _boundingBox.getHeight() -1;// -1;//same as above but one pixel and the player height to go up 
+				_grounded = true;
+				break;
+			case sides::LEFT:
+				std::cout << " LEFT TILE";
+				/*if (!_grounded) {
+					_dy = 0.1f;
+				}*/
+				_x = others.at(i).getRight() + 1;// +3;
+				
+				break;
+			case sides::RIGHT:
+				std::cout << " RIGHT TILE";
+				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;// -3;//same as above but on other side
+				
+				break;
+			}
+		}
+		
+	}
+}
+void Player::handleSlopeRectCollision(std::vector<Rectangle>& others) {
+	for (int i = 0; i < others.size(); i++) {
+		std::cout << std::endl;
+		sides::Side collisionSide = getCollisionSide(others.at(i));
+		if (collisionSide != sides::NONE) {
+			switch (collisionSide) {
+			case sides::TOP:
 				std::cout << " TOP ";
 				_dy = 0;//reset gravity counter
 				_y = others.at(i).getBottom() + 1;//+1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
@@ -92,29 +132,42 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 			case sides::BOTTOM:
 				std::cout << " BOTTOM ";
 				_dy = 0;
-				_y = others.at(i).getTop() - _boundingBox.getHeight() -1;// -1;//same as above but one pixel and the player height to go up 
-				
+				if (!others.at(i).isLeftSlope()) {//right slope
+					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+				}
+				else {//left slope
+					_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
+						(8 - (_x - others.at(i).getLeft())) - 1);
+				}
 				_grounded = true;
 				break;
-			case sides::LEFT:
+			case sides::LEFT://entrata nella slope
 				std::cout << " LEFT ";
-				/*if (!_grounded) {
-					_dy = 0.1f;
-				}*/
-				_x = others.at(i).getRight() + 1;// +3;
-				
+				_dy = 0;
+				if (!others.at(i).isLeftSlope()) {//right slope
+					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+				}
+				else {//left slope
+					_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
+						(8 - (_x - others.at(i).getLeft())) - 1);
+				}
 				break;
-			case sides::RIGHT:
+			case sides::RIGHT://entrata nella slope
 				std::cout << " RIGHT ";
-				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;// -3;//same as above but on other side
-				
+				_dy = 0;
+				if (!others.at(i).isLeftSlope()) {//right slope
+					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+				}
+				else {//left slope
+					_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
+						(8 - (_x - others.at(i).getLeft())) - 1);
+				}
 				break;
 			}
 		}
-		
+
 	}
 }
-
 void Player::handleSlopeCollision(std::vector<Slope> &others) {
 	for (int i = 0; i < others.size(); i++) {
 		//Calculate where on the slope the player's bottom center is touching

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="18">
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="29">
  <tileset firstgid="1" source="Crumbling Tower.tsx"/>
  <layer id="1" name="Background" width="20" height="16">
   <data encoding="csv">
@@ -53,15 +53,51 @@
   <object id="11" x="96" y="240" width="64" height="16"/>
   <object id="12" x="32" y="208" width="32" height="16"/>
  </objectgroup>
- <objectgroup color="#00ff00" id="4" name="Slopes">
-  <object id="13" x="64" y="144">
-   <polyline points="0,0 64,-64"/>
+ <objectgroup color="#ffff00" id="7" name="SlopeTiles">
+  <object id="18" x="64" y="128" width="16" height="16">
+   <properties>
+    <property name="side" value="right"/>
+   </properties>
   </object>
-  <object id="14" x="96" y="192">
-   <polyline points="0,0 48,-48"/>
+  <object id="19" x="80" y="112" width="16" height="16">
+   <properties>
+    <property name="side" value="right"/>
+   </properties>
   </object>
-  <object id="15" x="64" y="208">
-   <polyline points="0,0 32,32"/>
+  <object id="20" x="96" y="96" width="16" height="16">
+   <properties>
+    <property name="side" value="right"/>
+   </properties>
+  </object>
+  <object id="21" x="112" y="80" width="16" height="16">
+   <properties>
+    <property name="side" value="right"/>
+   </properties>
+  </object>
+  <object id="22" x="128" y="144" width="16" height="16">
+   <properties>
+    <property name="side" value="right"/>
+   </properties>
+  </object>
+  <object id="24" x="112" y="160" width="16" height="16">
+   <properties>
+    <property name="side" value="right"/>
+   </properties>
+  </object>
+  <object id="25" x="96" y="176" width="16" height="16">
+   <properties>
+    <property name="side" value="right"/>
+   </properties>
+  </object>
+  <object id="27" x="64" y="208" width="16" height="16">
+   <properties>
+    <property name="side" value="left"/>
+   </properties>
+  </object>
+  <object id="28" x="80" y="224" width="16" height="16">
+   <properties>
+    <property name="side" value="left"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup color="#00007f" id="5" name="SpawnPoint">

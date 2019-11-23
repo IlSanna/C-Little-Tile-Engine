@@ -25,7 +25,15 @@ std::vector<Rectangle> Level::checkTileCollision(const Rectangle &other) {
 	}
 	return collisions;
 }
-
+std::vector<Rectangle> Level::checkSlopeRectCollision(const Rectangle &other) {
+	std::vector<Rectangle> collisions;
+	for (int i = 0; i < _slopesRect.size(); i++) {//loop throug the vector of collision extracted from file
+		if (_slopesRect.at(i).collideWith(other)) {//if other is colliding with one of them
+			collisions.push_back(_slopesRect.at(i));//add it to the collision list
+		}
+	}
+	return collisions;
+}
 std::vector<Slope> Level::checkSlopeCollision(const Rectangle & other) {
 	std::vector<Slope> collisions;
 	for (int i = 0; i < _collisionSlopes.size(); i++) {//loop throug the vector of collision extracted from file
@@ -159,6 +167,35 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 				}
 			}
 		}
+		if (ss.str() == "SlopeTiles") {//if is collision group
+			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+			if (pObject) {
+				while (pObject) {//loop through each object
+
+
+					XMLElement* pProperties = pObject->FirstChildElement("properties");
+					if (pProperties) {
+						while (pProperties) {
+							XMLElement* pProperty = pProperties->FirstChildElement("property");
+							if (pProperty) {
+								while (pProperty) {
+									std::string value = pProperty->Attribute("value");
+									addSlopeRectangle(pObject,value);
+
+									pProperty = pProperty->NextSiblingElement("property");
+								}
+							}
+							pProperties = pProperties->NextSiblingElement("properties");
+						}
+					}
+
+
+
+					
+					pObject = pObject->NextSiblingElement("object");
+				}
+			}
+		}
 		if (ss.str() == "SpawnPoint") {//if is a spawn point group
 			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
 			if (pObject) {
@@ -284,6 +321,23 @@ void Level::addCollisionRectangle(tinyxml2::XMLElement * pObject) {
 		std::ceil(y) * globals::SPRITE_SCALE,
 		std::ceil(width) * globals::SPRITE_SCALE,
 		std::ceil(height) * globals::SPRITE_SCALE
+	));
+}
+void Level::addSlopeRectangle(tinyxml2::XMLElement * pObject, std::string value = "") {
+	float x, y, width, height;
+	//query attribute
+	x = pObject->FloatAttribute("x");
+	y = pObject->FloatAttribute("y");
+	width = pObject->FloatAttribute("width");
+	height = pObject->FloatAttribute("height");
+	
+	//add to collision vector
+	_slopesRect.push_back(Rectangle(//ceil will round up the floats
+		std::ceil(x) * globals::SPRITE_SCALE,
+		std::ceil(y) * globals::SPRITE_SCALE,
+		std::ceil(width) * globals::SPRITE_SCALE,
+		std::ceil(height) * globals::SPRITE_SCALE,
+		value == "left" ? true : false
 	));
 }
 

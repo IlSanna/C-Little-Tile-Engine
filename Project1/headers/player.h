@@ -20,6 +20,7 @@ public:
 	virtual void animationDone(std::string currentAnimation);
 
 	void handleTileCollision(std::vector<Rectangle> &others);
+	void handleSlopeRectCollision(std::vector<Rectangle>& others);
 	void handleSlopeCollision(std::vector<Slope> &others);
 	void handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
 
@@ -29,6 +30,5 @@ public:
 private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;
-
 	bool _grounded = false;
 };
