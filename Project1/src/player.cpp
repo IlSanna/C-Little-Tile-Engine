@@ -1,7 +1,7 @@
 #include "../headers/player.h"
 
 namespace player_constant {
-	const float WALK_SPEED = 0.2f;
+	const float WALK_SPEED = 0.14f;
 	const float GRAVITY = 0.002f;
 	const float GRAVITY_CAP = 0.8f;
 	const float JUMP_SPEED = 0.7f;
@@ -11,7 +11,7 @@ Player::Player() {
 }
 
 Player::Player(Graphics &graphics, Vector2 spawnPoint) :
-	AnimatedSprite(graphics, "content/sprite/simon.png", 0, 0, 16, 32, spawnPoint.x, spawnPoint.y, 300),//shouldbe 16
+	AnimatedSprite(graphics, "content/sprite/simon.png", 0, 0, 16, 32, spawnPoint.x, spawnPoint.y, 160),//shouldbe 16
 	_dx(0),
 	_dy(0),
 	_facing(RIGHT),
