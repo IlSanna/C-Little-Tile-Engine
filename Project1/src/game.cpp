@@ -102,6 +102,9 @@ void Game::update(float elapsedTime) {
 			_player.handleSlopeRectCollision(othersSlopeRect);
 		}
 	}
+	else {
+		//std::cout << "non collido" << std::endl;
+	}
 	//Check slopes
 	if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleSlopeCollision(otherSlopes);

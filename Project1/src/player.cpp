@@ -34,7 +34,8 @@ void Player::update(float elapsedTime) {
 	_x += _dx * elapsedTime;
 	_y += _dy * elapsedTime;
 	//move by deltay
-
+	//std::cout << " update = " << _y << std::endl;
+	//std::cout << _grounded << std::endl;
 	AnimatedSprite::update(elapsedTime);
 }
 
@@ -132,38 +133,54 @@ void Player::handleSlopeRectCollision(std::vector<Rectangle>& others) {
 			case sides::BOTTOM:
 				std::cout << " BOTTOM ";
 				_dy = 0;
-				if (!others.at(i).isLeftSlope()) {//right slope
-					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+				if (_grounded) {
+					if (!others.at(i).isLeftSlope()) {//right slope
+						_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) ;
+					}
+					else {//left slope
+						_y = (others.at(i).getTop() - _boundingBox.getHeight() -
+							(2 - (_x - others.at(i).getLeft())));
+						std::cout << " y = "<<_y <<" top= "<< 
+							others.at(i).getTop() - _boundingBox.getHeight() << std::endl;
+					}
 				}
-				else {//left slope
-					_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
-						(8 - (_x - others.at(i).getLeft())) - 1);
-				}
+				
 				_grounded = true;
 				break;
 			case sides::LEFT://entrata nella slope
 				std::cout << " LEFT ";
 				_dy = 0;
-				if (!others.at(i).isLeftSlope()) {//right slope
-					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+				if (_grounded) {
+					if (!others.at(i).isLeftSlope()) {//right slope
+						_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+					}
+					else {//left slope
+						_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
+							(2 - (_x - others.at(i).getLeft())));
+					}
 				}
-				else {//left slope
-					_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
-						(8 - (_x - others.at(i).getLeft())) - 1);
-				}
+
+				_grounded = true;
 				break;
 			case sides::RIGHT://entrata nella slope
 				std::cout << " RIGHT ";
 				_dy = 0;
-				if (!others.at(i).isLeftSlope()) {//right slope
-					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+				if (_grounded) {
+					if (!others.at(i).isLeftSlope()) {//right slope
+						_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+					}
+					else {//left slope
+						_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
+							(2 - (_x - others.at(i).getLeft())));
+					}
 				}
-				else {//left slope
-					_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
-						(8 - (_x - others.at(i).getLeft())) - 1);
-				}
+
+				_grounded = true;
 				break;
 			}
+		}
+		else {
+			std::cout << "NONE";
 		}
 
 	}
