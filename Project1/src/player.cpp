@@ -25,19 +25,7 @@ void Player::draw(Graphics &graphics) {
 	AnimatedSprite::draw(graphics,_x,_y);//this _x and _y came from sprite.h
 }
 
-void Player::update(float elapsedTime) {
-	//apply gravity
-	if (_dy <= player_constant::GRAVITY_CAP) {
-		_dy += player_constant::GRAVITY * elapsedTime;
-	}
-	//move by deltax
-	_x += _dx * elapsedTime;
-	_y += _dy * elapsedTime;
-	//move by deltay
-	//std::cout << " update = " << _y << std::endl;
-	//std::cout << _grounded << std::endl;
-	AnimatedSprite::update(elapsedTime);
-}
+
 
 void Player::moveLeft() {
 	_dx = -player_constant::WALK_SPEED;
@@ -74,11 +62,35 @@ void Player::setupAnimation() {
 
 void Player::animationDone(std::string currentAnimation) {
 }
+void Player::update(float elapsedTime) {
+	//apply gravity
+	if (_dy <= player_constant::GRAVITY_CAP) {
+		_dy += player_constant::GRAVITY * elapsedTime;
+	}
+	//move by deltax
+	_x += _dx * elapsedTime;
+	_y += _dy * elapsedTime;
 
+	if ((int)(_lastPos.y - player_constant::JUMP_SPEED)+2 >= (int)_y
+		&&_dy>0) {
+		//std::cout << "emp" << std::endl;
+		_grounded = true;
+	}
+	else {
+		_grounded = false;
+		//std::cout << "vola" << std::endl;
+	}
+	//std::cout << (_lastPos.y - player_constant::JUMP_SPEED) + 2
+		//<<" "<<_y<< std::endl;
+	//move by deltay
+	//std::cout << " dy = " << _dy << std::endl;
+	std::cout << _grounded << std::endl;
+	AnimatedSprite::update(elapsedTime);
+}
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
 	//look for which side is the player colliding with and move accordingly
 	for (int i = 0; i < others.size(); i++) {
-		std::cout << std::endl;
+		//std::cout << std::endl;
 		sides::Side collisionSide = getCollisionSide(others.at(i));
 		if (collisionSide != sides::NONE) {
 			switch (collisionSide) {
@@ -92,21 +104,19 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 				}
 				break;
 			case sides::BOTTOM:
-				std::cout << " BOTTOM TILE";
+				//std::cout << " BOTTOM TILE";
 				_dy = 0;
 				_y = others.at(i).getTop() - _boundingBox.getHeight() -1;// -1;//same as above but one pixel and the player height to go up 
-				_grounded = true;
+				//_grounded = true;
+				_lastPos = Vector2(_x, _y);
 				break;
 			case sides::LEFT:
-				std::cout << " LEFT TILE";
-				/*if (!_grounded) {
-					_dy = 0.1f;
-				}*/
+				//std::cout << " LEFT TILE";
 				_x = others.at(i).getRight() + 1;// +3;
 				
 				break;
 			case sides::RIGHT:
-				std::cout << " RIGHT TILE";
+				//std::cout << " RIGHT TILE";
 				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;// -3;//same as above but on other side
 				
 				break;
@@ -117,71 +127,91 @@ void Player::handleTileCollision(std::vector<Rectangle>& others) {
 }
 void Player::handleSlopeRectCollision(std::vector<Rectangle>& others) {
 	for (int i = 0; i < others.size(); i++) {
-		std::cout << std::endl;
-		sides::Side collisionSide = getCollisionSide(others.at(i));
-		if (collisionSide != sides::NONE) {
-			switch (collisionSide) {
-			case sides::TOP:
-				std::cout << " TOP ";
-				_dy = 0;//reset gravity counter
-				_y = others.at(i).getBottom() + 1;//+1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
-				if (_grounded) {
-					_dx = 0;
-					_x -= _facing == RIGHT ? 1.0f : -1.0f;
-				}
-				break;
-			case sides::BOTTOM:
-				std::cout << " BOTTOM ";
-				_dy = 0;
-				if (_grounded) {
-					if (!others.at(i).isLeftSlope()) {//right slope
-						_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) ;
-					}
-					else {//left slope
-						_y = (others.at(i).getTop() - _boundingBox.getHeight() -
-							(2 - (_x - others.at(i).getLeft())));
-						std::cout << " y = "<<_y <<" top= "<< 
-							others.at(i).getTop() - _boundingBox.getHeight() << std::endl;
-					}
-				}
-				
-				_grounded = true;
-				break;
-			case sides::LEFT://entrata nella slope
-				std::cout << " LEFT ";
-				_dy = 0;
-				if (_grounded) {
-					if (!others.at(i).isLeftSlope()) {//right slope
-						_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
-					}
-					else {//left slope
-						_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
-							(2 - (_x - others.at(i).getLeft())));
-					}
-				}
-
-				_grounded = true;
-				break;
-			case sides::RIGHT://entrata nella slope
-				std::cout << " RIGHT ";
-				_dy = 0;
-				if (_grounded) {
-					if (!others.at(i).isLeftSlope()) {//right slope
-						_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
-					}
-					else {//left slope
-						_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
-							(2 - (_x - others.at(i).getLeft())));
-					}
-				}
-
-				_grounded = true;
-				break;
+		//_dy = 0;
+		//std::cout << "o";
+		if (_grounded) {
+			_dy = 0;
+			if (!others.at(i).isLeftSlope()) {//right slope
+				_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft());
+				//_lastPos = Vector2(_x, _y);
 			}
+			else {//left slope
+				_y = (others.at(i).getTop() - _boundingBox.getHeight() -
+					(2 - (_x - others.at(i).getLeft())));
+				//_lastPos = Vector2(_x, _y);
+				//std::cout << " y = " << _y << " top= " <<
+					//others.at(i).getTop() - _boundingBox.getHeight() << std::endl;
+			}
+			_lastPos = Vector2(_x, _y);
 		}
-		else {
-			std::cout << "NONE";
-		}
+
+		_grounded = true;
+
+		//std::cout << std::endl;
+		//sides::Side collisionSide = getCollisionSide(others.at(i));
+		//if (collisionSide != sides::NONE) {
+		//	switch (collisionSide) {
+		//	case sides::TOP:
+		//		std::cout << " TOP ";
+		//		_dy = 0;//reset gravity counter
+		//		_y = others.at(i).getBottom() + 1;//+1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
+		//		if (_grounded) {
+		//			_dx = 0;
+		//			_x -= _facing == RIGHT ? 1.0f : -1.0f;
+		//		}
+		//		break;
+		//	case sides::BOTTOM:
+		//		std::cout << " BOTTOM ";
+		//		_dy = 0;
+		//		if (_grounded) {
+		//			if (!others.at(i).isLeftSlope()) {//right slope
+		//				_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) ;
+		//			}
+		//			else {//left slope
+		//				_y = (others.at(i).getTop() - _boundingBox.getHeight() -
+		//					(2 - (_x - others.at(i).getLeft())));
+		//				std::cout << " y = "<<_y <<" top= "<< 
+		//					others.at(i).getTop() - _boundingBox.getHeight() << std::endl;
+		//			}
+		//		}
+		//		
+		//		_grounded = true;
+		//		break;
+		//	case sides::LEFT://entrata nella slope
+		//		std::cout << " LEFT ";
+		//		_dy = 0;
+		//		if (_grounded) {
+		//			if (!others.at(i).isLeftSlope()) {//right slope
+		//				_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+		//			}
+		//			else {//left slope
+		//				_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
+		//					(2 - (_x - others.at(i).getLeft())));
+		//			}
+		//		}
+
+		//		_grounded = true;
+		//		break;
+		//	case sides::RIGHT://entrata nella slope
+		//		std::cout << " RIGHT ";
+		//		_dy = 0;
+		//		if (_grounded) {
+		//			if (!others.at(i).isLeftSlope()) {//right slope
+		//				_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) - 1;
+		//			}
+		//			else {//left slope
+		//				_y = (int)(others.at(i).getTop() - _boundingBox.getHeight() -
+		//					(2 - (_x - others.at(i).getLeft())));
+		//			}
+		//		}
+
+		//		_grounded = true;
+		//		break;
+		//	}
+		//}
+		//else {
+		//	std::cout << "NONE";
+		//}
 
 	}
 }

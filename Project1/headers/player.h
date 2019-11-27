@@ -30,5 +30,6 @@ public:
 private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;
+	Vector2 _lastPos;
 	bool _grounded = false;
 };

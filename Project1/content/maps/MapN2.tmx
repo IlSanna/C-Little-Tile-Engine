@@ -80,8 +80,6 @@
     <property name="side" value="left"/>
    </properties>
   </object>
-  <object id="44" x="96" y="176"/>
-  <object id="45" x="80" y="160"/>
  </objectgroup>
  <objectgroup color="#00007f" id="5" name="SpawnPoint">
   <object id="16" x="208" y="144">
