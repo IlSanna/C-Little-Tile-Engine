@@ -55,6 +55,9 @@ void Game::gameLoop() {
 		if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
 			_player.jump();
 		}
+		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
+			_player.setWantsToJump(false);
+		}
 		if (!input.isKeyHeld(SDL_SCANCODE_A) && !input.isKeyHeld(SDL_SCANCODE_D)) {
 			_player.stopMoving();
 		}
@@ -102,9 +105,7 @@ void Game::update(float elapsedTime) {
 			_player.handleSlopeRectCollision(othersSlopeRect);
 		}
 	}
-	else {
-		//std::cout << "non collido" << std::endl;
-	}
+	
 	//Check slopes
 	if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleSlopeCollision(otherSlopes);

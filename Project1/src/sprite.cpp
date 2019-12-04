@@ -24,13 +24,13 @@ Sprite::~Sprite() {
 }
 
 void Sprite::update() {
-	//update BB position
-	_boundingBox = Rectangle(//magic numbers to make a better BB
-		_x,// +3,
-		_y,// +1, 
-		(_sourceRect.w -1) * globals::SPRITE_SCALE,//-3
-		(_sourceRect.h -2)* globals::SPRITE_SCALE
-	);
+	////update BB position
+	//_boundingBox = Rectangle(//magic numbers to make a better BB
+	//	_x,// +3,
+	//	_y,// +1, 
+	//	(_sourceRect.w -1) * globals::SPRITE_SCALE,//-3
+	//	(_sourceRect.h -2)* globals::SPRITE_SCALE
+	//);
 }
 
 void Sprite::draw(Graphics & graphics, int x, int y) {

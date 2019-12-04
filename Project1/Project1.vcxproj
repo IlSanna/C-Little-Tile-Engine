@@ -44,6 +44,7 @@
     <ClInclude Include="headers\sprite.h" />
     <ClInclude Include="headers\Tile.h" />
     <ClInclude Include="headers\tinyxml2.h" />
+    <ClInclude Include="headers\whip.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\sprite\MyChar.png" />

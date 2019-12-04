@@ -64,6 +64,7 @@
     <ClInclude Include="headers\rectangle.h" />
     <ClInclude Include="headers\slope.h" />
     <ClInclude Include="headers\door.h" />
+    <ClInclude Include="headers\whip.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\sprite\MyChar.png" />

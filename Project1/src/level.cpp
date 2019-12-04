@@ -98,7 +98,7 @@ void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &gra
 				extractTileInfo(pData,tileset);//forse cambiero il tileset che vado passando
 			}
 			pLayer = pLayer->NextSiblingElement("layer");
-		}
+		} 
 	}
 	//load collisions
 	XMLElement* pObjectGroup = mapNode->FirstChildElement("objectgroup");

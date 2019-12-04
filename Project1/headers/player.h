@@ -27,9 +27,11 @@ public:
 	const float getX() const;
 	const float getY() const;
 	void setGrounded(bool value);
+	void setWantsToJump(bool value);
 private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;
 	Vector2 _lastPos;
+	bool _wantsToJump;
 	bool _grounded = false;
 };
