@@ -29,6 +29,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\tile.cpp" />
     <ClCompile Include="src\tinyxml2.cpp" />
+    <ClCompile Include="src\whip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\animatedSprite.h" />

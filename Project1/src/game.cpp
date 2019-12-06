@@ -9,7 +9,7 @@ namespace {
 
 Game::Game() {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	gameLoop();
+gameLoop();
 }
 
 Game::~Game() {
@@ -20,7 +20,7 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_level = Level("content/tileset/ClockTowerTileset.png","content/maps/MapN2.tmx", graphics);
+	_level = Level("content/tileset/ClockTowerTileset.png", "content/maps/MapN2.tmx", graphics);
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
 	_graphics = graphics;
 
@@ -43,24 +43,9 @@ void Game::gameLoop() {
 				return;
 			}
 		}
-		if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
-			return;
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			_player.moveLeft();
-		}
-		else if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			_player.moveRight();
-		}
-		if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
-			_player.jump();
-		}
-		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
-			_player.setWantsToJump(false);
-		}
-		if (!input.isKeyHeld(SDL_SCANCODE_A) && !input.isKeyHeld(SDL_SCANCODE_D)) {
-			_player.stopMoving();
-		}
+
+		handleInput(input, retflag);
+		if (retflag) return;
 
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		//take the time of the last loop and subtracting it
@@ -69,10 +54,39 @@ void Game::gameLoop() {
 		//i have to pass to update the elapsed time and this value need to be
 		//bounded between elapsed time and max frame time
 		update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
-		LAST_UPDATE_TIME = CURRENT_TIME_MS; 
-		
+		LAST_UPDATE_TIME = CURRENT_TIME_MS;
+
 		draw(graphics);
 	}
+}
+
+void Game::handleInput(Input &input, bool &retflag) {
+	retflag = true;
+	if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
+		return;
+	}
+	else if (input.isKeyHeld(SDL_SCANCODE_A)) {
+		_player.moveLeft();
+	}
+	else if (input.isKeyHeld(SDL_SCANCODE_D)) {
+		_player.moveRight();
+	}
+	if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
+		_player.jump();
+	}
+	else if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
+		_player.setWantsToJump(false);
+	}
+	if (input.wasKeyPressed(SDL_SCANCODE_RETURN)) {
+		_player.attack();
+	}
+	else if (input.wasKeyReleased(SDL_SCANCODE_RETURN)) {
+
+	}
+	if (!input.isKeyHeld(SDL_SCANCODE_A) && !input.isKeyHeld(SDL_SCANCODE_D)) {
+		_player.stopMoving();
+	}
+	retflag = false;
 }
 
 void Game::update(float elapsedTime) {
@@ -82,19 +96,9 @@ void Game::update(float elapsedTime) {
 	//collision check
 	std::vector<Rectangle> others;
 	std::vector<Rectangle> othersSlopeRect;
-	std::vector<Slope> otherSlopes;
+	//std::vector<Slope> otherSlopes;
 	std::vector<Door> otherDoors;
 
-	//if the size of the vector others is greater than zero
-	//vector created with the check tile collision functions
-	//if ( (others = _level.checkTileCollision(_player.getBoundingBox()) ).size() > 0) {
-	//	//if we are here means that we are colliding with at least one tile
-	//	_player.handleTileCollision(others);
-	//}
-	//if ((othersSlopeRect = _level.checkSlopeRectCollision(_player.getBoundingBox())).size() > 0) {
-	//	//if we are here means that we are colliding with at least one tile
-	//	_player.handleSlopeRectCollision(othersSlopeRect);
-	//}
 	if ((othersSlopeRect = _level.checkSlopeRectCollision(_player.getBoundingBox())).size() > 0 ||
 		(others = _level.checkTileCollision(_player.getBoundingBox())).size() > 0) {
 		//im colliding with something
@@ -105,11 +109,16 @@ void Game::update(float elapsedTime) {
 			_player.handleSlopeRectCollision(othersSlopeRect);
 		}
 	}
-	
-	//Check slopes
-	if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
-		_player.handleSlopeCollision(otherSlopes);
+	if (_player.getWhip().getVisible()) {
+		if ((others = _level.checkTileCollision(_player.getWhip().getBoundingBox())).size() > 0) {
+			_player.getWhip().handleTileCollision(others);
+		}
 	}
+
+	//Check slopes
+	//if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
+	//	_player.handleSlopeCollision(otherSlopes);
+	//}
 	//Check doors
 	if ((otherDoors = _level.checkDoorsCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleDoorsCollision(otherDoors,_level,_graphics);

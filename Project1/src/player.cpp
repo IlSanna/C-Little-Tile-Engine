@@ -12,7 +12,7 @@ Player::Player() {
 }
 
 Player::Player(Graphics &graphics, Vector2 spawnPoint) :
-	AnimatedSprite(graphics, "content/sprite/simon.png", 0, 0, 16, 32, spawnPoint.x, spawnPoint.y, 160),//shouldbe 16
+	AnimatedSprite(graphics, "content/sprite/simonTemplate.png", 0, 0, 16, 32, spawnPoint.x, spawnPoint.y, 160),//shouldbe 16
 	_dx(0),
 	_dy(0),
 	_facing(RIGHT),
@@ -20,13 +20,10 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) :
 {
 	setupAnimation();
 	playAnimation("RunLeft");
+
+	_whip = Whip(graphics, Vector2(_x+32, _y));
+	_whip.setVisible(false);
 }
-
-void Player::draw(Graphics &graphics) {
-	AnimatedSprite::draw(graphics,_x,_y);//this _x and _y came from sprite.h
-}
-
-
 
 void Player::moveLeft() {
 	_dx = -player_constant::WALK_SPEED;
@@ -62,6 +59,7 @@ void Player::setupAnimation() {
 	addAnimation(1, 0, 32, "IdleRight", 16, 32, Vector2(0, 0));
 	addAnimation(3, 0, 0, "RunLeft", 16, 32, Vector2(0, 0));
 	addAnimation(3, 0, 32, "RunRight", 16, 32, Vector2(0, 0));
+	addAnimation(3, 0, 64, "attack", 32, 32, Vector2(0, 0));
 }
 
 void Player::animationDone(std::string currentAnimation) {
@@ -75,22 +73,8 @@ void Player::update(float elapsedTime) {
 	_x += _dx * elapsedTime;
 	_y += _dy * elapsedTime;
 
-	//if ((int)(_lastPos.y - player_constant::JUMP_SPEED)+1 >= (int)_y&&_dy >= 0
-	//	) {//&&_dy >= 0
-	//	_grounded = true;
-	//}
-	//else {
-	//	_grounded = false;
-	//}
-	if ((int)_y == _lastPos.y) {
-		_grounded = true;
-	}
-	else {
-		_grounded = false;
-	}
-	std::cout<<(int)_y<<" = "<< _lastPos.y << " gr = " << _grounded << std::endl;
-	//std::cout << (int)(_lastPos.y - player_constant::JUMP_SPEED) +1 << " >= " << (int)_y
-		//<< " && " << _dy <<" gr = "<<_grounded<< std::endl;
+	//groundcheck
+	_grounded = (int)_y == _lastPos.y ? true : false;
 	
 	//update BB position
 	_boundingBox = Rectangle(//magic numbers to make a better BB
@@ -101,6 +85,8 @@ void Player::update(float elapsedTime) {
 	);
 	
 	AnimatedSprite::update(elapsedTime);
+	
+	_whip.update(elapsedTime, _x , _y,_facing);//32 because sprite scale on 2x
 }
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
 	//look for which side is the player colliding with and move accordingly
@@ -223,10 +209,21 @@ const float Player::getY() const {
 	return _y;
 }
 
-void Player::setGrounded(bool value) {
-	_grounded = value;
+Whip Player::getWhip() {
+	return _whip;
 }
 
 void Player::setWantsToJump(bool value) {
 	_wantsToJump = value;
+}
+
+void Player::attack() {
+	playAnimation("attack");
+	_whip.setVisible(true);
+}
+
+void Player::draw(Graphics &graphics) {
+	
+	AnimatedSprite::draw(graphics, _x, _y);//this _x and _y came from sprite.h
+	_whip.draw(graphics);
 }
