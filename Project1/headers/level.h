@@ -12,6 +12,7 @@
 struct Tileset {
 	SDL_Texture* Texture;
 	int FirstGid;
+	Tileset(){}
 	Tileset(SDL_Texture* texture, int firstGid) {
 		Texture = texture;
 		FirstGid = firstGid;
@@ -22,7 +23,7 @@ struct Tileset {
 class Level {
 public:
 	Level();
-	Level(std::string tilesetPath,std::string mapNameInfo, Graphics &graphics);
+	Level(std::string mapNameInfo, Graphics &graphics);//std::string tilesetPath,
 
 	void update(float elapsedTime);
 	void draw(Graphics &graphics);
@@ -34,7 +35,7 @@ public:
 
 	const Vector2 getPlayerSpawnPoint() const;
 private:
-	std::string _tilesetPath;
+	//std::string _tilesetPath;
 	std::string _mapNameInfo;
 	Vector2 _spawnPoint;
 
@@ -49,11 +50,11 @@ private:
 	std::vector<Slope> _collisionSlopes;
 	std::vector<Door> _doorList;
 
-	void extractTileInfo(tinyxml2::XMLElement* pData, SDL_Texture* tileset);
+	void extractTileInfo(tinyxml2::XMLElement* pData, std::vector<Tileset> tilesets);
 	void setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition);
 	void loadTiledObjects(tinyxml2::XMLElement * pObjectGroup);
 	void addCollisionRectangle(tinyxml2::XMLElement * pObject);
 	void addSlopeRectangle(tinyxml2::XMLElement * pObject, std::string value);
-	void loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics);
+	void loadMapInfo(std::string mapName, Graphics &graphics);//, SDL_Texture* tileset
 };
 

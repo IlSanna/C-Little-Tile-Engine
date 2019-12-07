@@ -5,13 +5,13 @@ using namespace tinyxml2;
 Level::Level() {
 }
 
-Level::Level(std::string tilesetPath, std::string mapNameInfo, Graphics &graphics) :
-	_tilesetPath(tilesetPath),
+Level::Level(std::string mapNameInfo, Graphics &graphics) ://std::string tilesetPath
+	//_tilesetPath(tilesetPath),
 	_mapNameInfo(mapNameInfo),
 	_size(Vector2(0,0)) 
 {
-	SDL_Texture* tileset = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(_tilesetPath));
-	loadMapInfo(_mapNameInfo,tileset, graphics);
+	//SDL_Texture* tileset = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(_tilesetPath));
+	loadMapInfo(_mapNameInfo, graphics);//,tileset
 }
 
 //returns a vector of collision rectangles based on the precompiled level collisions
@@ -57,7 +57,7 @@ const Vector2 Level::getPlayerSpawnPoint() const {
 }
 
 //load graphic info
-void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics) {
+void Level::loadMapInfo(std::string mapName, Graphics &graphics) {//, SDL_Texture* tileset
 	XMLDocument doc;
 	doc.LoadFile(mapName.c_str());
 	
@@ -88,6 +88,10 @@ void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &gra
 	//	}
 	//}
 
+	SDL_Texture* tilesetTexture0 = SDL_CreateTextureFromSurface(graphics.getRenderer(), 
+		graphics.loadImage("content/tileset/ClockTowerTileset.png"));
+	_tileSets.push_back(Tileset(tilesetTexture0, 1));
+
 	//int firstgid;
 	//		pTileset->QueryIntAttribute("firstgid", &firstgid);
 	//		SDL_Texture* tex = SDL_CreateTextureFromSurface(
@@ -100,7 +104,7 @@ void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &gra
 		while (pLayer) {
 			XMLElement* pData = pLayer->FirstChildElement("data");
 			if (pData) {//load the tiles for this layer
-				extractTileInfo(pData,tileset);//forse cambiero il tileset che vado passando
+				extractTileInfo(pData,_tileSets);
 			}
 			pLayer = pLayer->NextSiblingElement("layer");
 		} 
@@ -115,7 +119,7 @@ void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &gra
 //parse the pdata element to find the gid number, then
 //based on that it finds the correct world position
 //then it created the tile object
-void Level::extractTileInfo(tinyxml2::XMLElement * pData, SDL_Texture* tileset) {
+void Level::extractTileInfo(tinyxml2::XMLElement * pData, std::vector<Tileset> tilesets) {
 	std::string temp = pData->GetText();
 	std::istringstream split(temp);
 	std::string line;
@@ -129,7 +133,19 @@ void Level::extractTileInfo(tinyxml2::XMLElement * pData, SDL_Texture* tileset) 
 		yy += _tileSize.y * (tileCounter / _size.x);
 		Vector2 finalTilePosition = Vector2(xx, yy);
 		if (currentGid != 0) {
-			setTile(tileset, currentGid, finalTilePosition);
+			//test
+			Tileset tls;
+			int closest = 0;
+			for (int i = 0; i < _tileSets.size(); i++) {
+				if (_tileSets[i].FirstGid <= currentGid) {
+					if (_tileSets[i].FirstGid > closest) {
+						closest = _tileSets[i].FirstGid;
+						tls = _tileSets.at(i);
+					}
+				}
+			}
+			setTile(tls.Texture, currentGid, finalTilePosition);
+			//test
 			tileCounter++;
 		}
 		else {

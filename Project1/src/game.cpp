@@ -20,7 +20,7 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_level = Level("content/tileset/ClockTowerTileset.png", "content/maps/MapN2.tmx", graphics);
+	_level = Level( "content/maps/MapN2.tmx", graphics);//"content/tileset/ClockTowerTileset.png"
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
 	_graphics = graphics;
 

@@ -195,7 +195,7 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 
 void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics) {
 	for (int i = 0; i < others.size(); i++) {
-		level = Level("content/tileset/ClockTowerTileset.png",others.at(i).getDestination(), graphics);
+		level = Level(others.at(i).getDestination(), graphics);//"content/tileset/ClockTowerTileset.png",
 		_x = level.getPlayerSpawnPoint().x;
 		_y = level.getPlayerSpawnPoint().y;
 	}
