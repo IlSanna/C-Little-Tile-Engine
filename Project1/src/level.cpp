@@ -8,7 +8,6 @@ Level::Level() {
 Level::Level(std::string tilesetPath, std::string mapNameInfo, Graphics &graphics) :
 	_tilesetPath(tilesetPath),
 	_mapNameInfo(mapNameInfo),
-	//_spawnPoint(spawnPoint),
 	_size(Vector2(0,0)) 
 {
 	SDL_Texture* tileset = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(_tilesetPath));
@@ -43,7 +42,6 @@ std::vector<Slope> Level::checkSlopeCollision(const Rectangle & other) {
 	}
 	return collisions;
 }
-
 std::vector<Door> Level::checkDoorsCollision(const Rectangle &other) {
 	std::vector<Door> others;
 	for (int i = 0; i < _doorList.size(); i++) {//loop throug the vector of collision extracted from file
@@ -57,6 +55,7 @@ std::vector<Door> Level::checkDoorsCollision(const Rectangle &other) {
 const Vector2 Level::getPlayerSpawnPoint() const {
 	return _spawnPoint;
 }
+
 //load graphic info
 void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &graphics) {
 	XMLDocument doc;
@@ -83,11 +82,17 @@ void Level::loadMapInfo(std::string mapName, SDL_Texture* tileset, Graphics &gra
 	//		int firstgid;
 	//		pTileset->QueryIntAttribute("firstgid", &firstgid);
 	//		SDL_Texture* tex = SDL_CreateTextureFromSurface(
-	//			graphics.getRenderer(), graphics.loadImage("content/tileset/PrtCave.png"));//attenzione qui con i percorsi
+	//			graphics.getRenderer(), graphics.loadImage("content/tileset/PrtCave.png"));
 	//		this->_tileSets.push_back(Tileset(tex, firstgid));
 	//		pTileset = pTileset->NextSiblingElement("tileset");
 	//	}
 	//}
+
+	//int firstgid;
+	//		pTileset->QueryIntAttribute("firstgid", &firstgid);
+	//		SDL_Texture* tex = SDL_CreateTextureFromSurface(
+	//			graphics.getRenderer(), graphics.loadImage("content/tileset/PrtCave.png"));
+	//		this->_tileSets.push_back(Tileset(tex, firstgid));
 
 	//loading the layer and tiles
 	XMLElement* pLayer = mapNode->FirstChildElement("layer");

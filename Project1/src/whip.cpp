@@ -27,9 +27,14 @@ void Whip::update(float elapsedTime, float x, float y, Direction facing) {
 			(_sourceRect.h - 1)* globals::SPRITE_SCALE
 		);
 
-		AnimatedSprite::update(elapsedTime);
+		//AnimatedSprite::update(elapsedTime);
 	}
-	
+	//_timeElapsed += elapsedTime;
+	//if (_timeElapsed > _timeToUpdate) {//managing the fire rate
+	//	_timeElapsed -= _timeToUpdate;
+	//	
+	//	setVisible(false);
+	//}
 }
 void Whip::draw(Graphics & graphics) {
 	AnimatedSprite::draw(graphics, _x, _y);

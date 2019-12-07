@@ -78,7 +78,11 @@ void Game::handleInput(Input &input, bool &retflag) {
 		_player.setWantsToJump(false);
 	}
 	if (input.wasKeyPressed(SDL_SCANCODE_RETURN)) {
-		_player.attack();
+		//1000 because this is the number of milliseconds in a second.
+		/*if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 / fireRate) {
+			_player.attack();
+			lastPressed = gameTimeTotal;
+		}*/
 	}
 	else if (input.wasKeyReleased(SDL_SCANCODE_RETURN)) {
 

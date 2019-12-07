@@ -19,6 +19,8 @@ public:
 private:
 	float _dx = 4;
 	float _dy;//deltaX and deltaY, the change in x and y direction
+	double _timeToUpdate = 1000;
+	double _timeElapsed = 0;
 	Direction _facing;
 	Vector2 _lastPos;
 };
