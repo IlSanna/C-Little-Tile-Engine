@@ -51,7 +51,7 @@ private:
 	std::vector<Door> _doorList;
 
 	void extractTileInfo(tinyxml2::XMLElement* pData, std::vector<Tileset> tilesets);
-	void setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition);
+	void setTile(Tileset tileset, int currentGid, const Vector2 &finalTilePosition);
 	void loadTiledObjects(tinyxml2::XMLElement * pObjectGroup);
 	void addCollisionRectangle(tinyxml2::XMLElement * pObject);
 	void addSlopeRectangle(tinyxml2::XMLElement * pObject, std::string value);

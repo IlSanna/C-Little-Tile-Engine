@@ -92,6 +92,10 @@ void Level::loadMapInfo(std::string mapName, Graphics &graphics) {//, SDL_Textur
 		graphics.loadImage("content/tileset/ClockTowerTileset.png"));
 	_tileSets.push_back(Tileset(tilesetTexture0, 1));
 
+	SDL_Texture* tilesetTexture1 = SDL_CreateTextureFromSurface(graphics.getRenderer(),
+		graphics.loadImage("content/tileset/enemies.png"));
+	_tileSets.push_back(Tileset(tilesetTexture1, 837));
+
 	//int firstgid;
 	//		pTileset->QueryIntAttribute("firstgid", &firstgid);
 	//		SDL_Texture* tex = SDL_CreateTextureFromSurface(
@@ -133,7 +137,6 @@ void Level::extractTileInfo(tinyxml2::XMLElement * pData, std::vector<Tileset> t
 		yy += _tileSize.y * (tileCounter / _size.x);
 		Vector2 finalTilePosition = Vector2(xx, yy);
 		if (currentGid != 0) {
-			//test
 			Tileset tls;
 			int closest = 0;
 			for (int i = 0; i < _tileSets.size(); i++) {
@@ -144,8 +147,7 @@ void Level::extractTileInfo(tinyxml2::XMLElement * pData, std::vector<Tileset> t
 					}
 				}
 			}
-			setTile(tls.Texture, currentGid, finalTilePosition);
-			//test
+			setTile(tls, currentGid, finalTilePosition);
 			tileCounter++;
 		}
 		else {
@@ -156,18 +158,19 @@ void Level::extractTileInfo(tinyxml2::XMLElement * pData, std::vector<Tileset> t
 
 //finds the position of the specific gid on the tileset and 
 //create a tile object with the given world position
-void Level::setTile(SDL_Texture * tileset, int currentGid, const Vector2 &finalTilePosition) {
+void Level::setTile(Tileset tileset, int currentGid, const Vector2 &finalTilePosition) {
 	int tilesetWidth, tilesetHeight;
-	SDL_QueryTexture(tileset, NULL, NULL, &tilesetWidth, &tilesetHeight);
+	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
+	int temp = currentGid - tileset.FirstGid;
 	//for some reason it dosnt read the last tile column from the tileset
-	int tsxx = currentGid % (tilesetWidth / _tileSize.x) - 1;
+	int tsxx = temp % (tilesetWidth / _tileSize.x) ;
 	tsxx *= _tileSize.x;
 	int tsyy = 0;
-	int amt = (currentGid / (tilesetWidth / _tileSize.x));
+	int amt = (temp / (tilesetWidth / _tileSize.x));
 	tsyy = _tileSize.y * amt;
-
+	
 	Vector2 finalTilesetPosition = Vector2(tsxx, tsyy);
-	Tile tile(tileset, Vector2(_tileSize.x, _tileSize.y), finalTilesetPosition, finalTilePosition);
+	Tile tile(tileset.Texture, Vector2(_tileSize.x, _tileSize.y), finalTilesetPosition, finalTilePosition);
 	_tileList.push_back(tile);
 }
 //END of loading graphic informations

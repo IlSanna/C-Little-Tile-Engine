@@ -35,8 +35,7 @@ void AnimatedSprite::update(float elapsedTime) {
 			if (_currentAnimationOnce) {//if it need to be played just one frame
 				setVisible(false);
 			}
-			_frameIndex = 0;//start from the first frame
-			animationDone(_currentAnimation);
+			stopAnimation();
 		}
 	}
 }

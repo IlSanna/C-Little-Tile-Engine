@@ -13,6 +13,7 @@ Graphics::~Graphics() {
 SDL_Surface * Graphics::loadImage(const std::string &filePath) {
 	if (_spriteSheets.count(filePath) == 0) {//this means it isnt loaded, it cant find it->then load
 		_spriteSheets[filePath] = IMG_Load(filePath.c_str());
+		std::cout << "loaded: "<<filePath << std::endl;
 	}
 	else {
 		std::cout << "image already in memory" << std::endl;
