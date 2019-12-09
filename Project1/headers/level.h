@@ -9,6 +9,9 @@
 #include "slope.h"
 #include "door.h"
 
+class Enemy;
+class Player;
+
 struct Tileset {
 	SDL_Texture* Texture;
 	int FirstGid;
@@ -25,7 +28,7 @@ public:
 	Level();
 	Level(std::string mapNameInfo, Graphics &graphics);//std::string tilesetPath,
 
-	void update(float elapsedTime);
+	void update(float elapsedTime, Player &player);
 	void draw(Graphics &graphics);
 
 	std::vector<Rectangle> checkTileCollision(const Rectangle &other);
@@ -49,10 +52,11 @@ private:
 	std::vector<Rectangle> _slopesRect;
 	std::vector<Slope> _collisionSlopes;
 	std::vector<Door> _doorList;
+	std::vector<Enemy*> _enemiesList;
 
 	void extractTileInfo(tinyxml2::XMLElement* pData, std::vector<Tileset> tilesets);
 	void setTile(Tileset tileset, int currentGid, const Vector2 &finalTilePosition);
-	void loadTiledObjects(tinyxml2::XMLElement * pObjectGroup);
+	void loadTiledObjects(tinyxml2::XMLElement * pObjectGroup, Graphics &graphics);
 	void addCollisionRectangle(tinyxml2::XMLElement * pObject);
 	void addSlopeRectangle(tinyxml2::XMLElement * pObject, std::string value);
 	void loadMapInfo(std::string mapName, Graphics &graphics);//, SDL_Texture* tileset

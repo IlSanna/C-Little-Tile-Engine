@@ -20,7 +20,7 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
-	_level = Level( "content/maps/MapN2.tmx", graphics);//"content/tileset/ClockTowerTileset.png"
+	_level = Level( "content/maps/MapN2.tmx", graphics);
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
 	_graphics = graphics;
 
@@ -78,11 +78,7 @@ void Game::handleInput(Input &input, bool &retflag) {
 		_player.setWantsToJump(false);
 	}
 	if (input.wasKeyPressed(SDL_SCANCODE_RETURN)) {
-		//1000 because this is the number of milliseconds in a second.
-		/*if (gameTimeTotal.asMilliseconds() - lastPressed.asMilliseconds() > 1000 / fireRate) {
-			_player.attack();
-			lastPressed = gameTimeTotal;
-		}*/
+		_player.attack();
 	}
 	else if (input.wasKeyReleased(SDL_SCANCODE_RETURN)) {
 
@@ -95,7 +91,7 @@ void Game::handleInput(Input &input, bool &retflag) {
 
 void Game::update(float elapsedTime) {
 	_player.update(elapsedTime);
-	_level.update(elapsedTime);
+	_level.update(elapsedTime,_player);
 
 	//collision check
 	std::vector<Rectangle> others;
@@ -113,7 +109,8 @@ void Game::update(float elapsedTime) {
 			_player.handleSlopeRectCollision(othersSlopeRect);
 		}
 	}
-	if (_player.getWhip().getVisible()) {
+	
+	if (_player.getWhip().getActive()) {
 		if ((others = _level.checkTileCollision(_player.getWhip().getBoundingBox())).size() > 0) {
 			_player.getWhip().handleTileCollision(others);
 		}
@@ -123,6 +120,7 @@ void Game::update(float elapsedTime) {
 	//if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {
 	//	_player.handleSlopeCollision(otherSlopes);
 	//}
+
 	//Check doors
 	if ((otherDoors = _level.checkDoorsCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleDoorsCollision(otherDoors,_level,_graphics);

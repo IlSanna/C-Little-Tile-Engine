@@ -1,5 +1,7 @@
 #include "../headers/level.h"
 
+#include "../headers/enemy.h"
+
 using namespace tinyxml2;
 
 Level::Level() {
@@ -75,19 +77,7 @@ void Level::loadMapInfo(std::string mapName, Graphics &graphics) {//, SDL_Textur
 	mapNode->QueryIntAttribute("tileheight", &tileHeight);
 	_tileSize = Vector2(tileWidth, tileHeight);
 
-	////Loading the tilesets
-	//XMLElement* pTileset = mapNode->FirstChildElement("tileset");
-	//if (pTileset) {
-	//	while (pTileset) {//reads until next tileset tag is found
-	//		int firstgid;
-	//		pTileset->QueryIntAttribute("firstgid", &firstgid);
-	//		SDL_Texture* tex = SDL_CreateTextureFromSurface(
-	//			graphics.getRenderer(), graphics.loadImage("content/tileset/PrtCave.png"));
-	//		this->_tileSets.push_back(Tileset(tex, firstgid));
-	//		pTileset = pTileset->NextSiblingElement("tileset");
-	//	}
-	//}
-
+	//to add a tileset just copy the line above and look at the first gid number
 	SDL_Texture* tilesetTexture0 = SDL_CreateTextureFromSurface(graphics.getRenderer(), 
 		graphics.loadImage("content/tileset/ClockTowerTileset.png"));
 	_tileSets.push_back(Tileset(tilesetTexture0, 1));
@@ -95,12 +85,6 @@ void Level::loadMapInfo(std::string mapName, Graphics &graphics) {//, SDL_Textur
 	SDL_Texture* tilesetTexture1 = SDL_CreateTextureFromSurface(graphics.getRenderer(),
 		graphics.loadImage("content/tileset/enemies.png"));
 	_tileSets.push_back(Tileset(tilesetTexture1, 837));
-
-	//int firstgid;
-	//		pTileset->QueryIntAttribute("firstgid", &firstgid);
-	//		SDL_Texture* tex = SDL_CreateTextureFromSurface(
-	//			graphics.getRenderer(), graphics.loadImage("content/tileset/PrtCave.png"));
-	//		this->_tileSets.push_back(Tileset(tex, firstgid));
 
 	//loading the layer and tiles
 	XMLElement* pLayer = mapNode->FirstChildElement("layer");
@@ -116,7 +100,7 @@ void Level::loadMapInfo(std::string mapName, Graphics &graphics) {//, SDL_Textur
 	//load collisions
 	XMLElement* pObjectGroup = mapNode->FirstChildElement("objectgroup");
 	if (pObjectGroup) {
-		loadTiledObjects(pObjectGroup);
+		loadTiledObjects(pObjectGroup,graphics);
 	}
 }
 
@@ -162,8 +146,8 @@ void Level::setTile(Tileset tileset, int currentGid, const Vector2 &finalTilePos
 	int tilesetWidth, tilesetHeight;
 	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
 	int temp = currentGid - tileset.FirstGid;
-	//for some reason it dosnt read the last tile column from the tileset
-	int tsxx = temp % (tilesetWidth / _tileSize.x) ;
+
+	int tsxx = temp % (tilesetWidth / _tileSize.x);
 	tsxx *= _tileSize.x;
 	int tsyy = 0;
 	int amt = (temp / (tilesetWidth / _tileSize.x));
@@ -177,7 +161,7 @@ void Level::setTile(Tileset tileset, int currentGid, const Vector2 &finalTilePos
 
 //parse each objets layer from tiled xml
 //different behaviours depending on the objects names
-void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
+void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup,Graphics &graphics) {
 	while (pObjectGroup) {//loop through each object groups
 		const char* name = pObjectGroup->Attribute("name");
 		std::stringstream ss;
@@ -230,6 +214,22 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup) {
 					_spawnPoint = Vector2(std::ceil(x) * globals::SPRITE_SCALE,
 										  std::ceil(y) * globals::SPRITE_SCALE
 					);
+					pObject = pObject->NextSiblingElement("object");
+				}
+			}
+		}
+		if (ss.str() == "Enemies") {//if is a spawn point group
+			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+			if (pObject) {
+				while (pObject) {//loop through each object
+					float x = pObject->FloatAttribute("x");
+					float y = pObject->FloatAttribute("y");
+
+					Vector2 temp =Vector2(std::ceil(x) * globals::SPRITE_SCALE,
+						std::ceil(y) * globals::SPRITE_SCALE);
+					//std::cout << "bat at: " << temp.x<<temp.y << std::endl;
+					_enemiesList.push_back(new Bat(graphics, temp));
+
 					pObject = pObject->NextSiblingElement("object");
 				}
 			}
@@ -365,11 +365,17 @@ void Level::addSlopeRectangle(tinyxml2::XMLElement * pObject, std::string value 
 	));
 }
 
-void Level::update(float elapsedTime) {
+void Level::update(float elapsedTime, Player &player) {
+	for (int i = 0; i <  _enemiesList.size(); i++) {
+		_enemiesList.at(i)->update(elapsedTime, player);
+	}
 }
 
 void Level::draw(Graphics &graphics) {
 	for (int i = 0; i < _tileList.size(); i++) {
 		_tileList.at(i).draw(graphics);
+	}
+	for (int i = 0; i < _enemiesList.size(); i++) {
+		_enemiesList.at(i)->draw(graphics);
 	}
 }

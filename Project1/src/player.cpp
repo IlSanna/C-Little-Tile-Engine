@@ -22,7 +22,7 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) :
 	playAnimation("RunLeft");
 
 	_whip = Whip(graphics, Vector2(_x+32, _y));
-	_whip.setVisible(false);
+	//_whip.setVisible(false);
 }
 
 void Player::moveLeft() {
@@ -86,7 +86,7 @@ void Player::update(float elapsedTime) {
 	
 	AnimatedSprite::update(elapsedTime);
 	
-	_whip.update(elapsedTime, _x , _y,_facing);//32 because sprite scale on 2x
+	_whip.update(elapsedTime, _x , _y,_facing);
 }
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
 	//look for which side is the player colliding with and move accordingly
@@ -192,7 +192,6 @@ void Player::handleSlopeCollision(std::vector<Slope> &others) {
 		}
 	}
 }
-
 void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics) {
 	for (int i = 0; i < others.size(); i++) {
 		level = Level(others.at(i).getDestination(), graphics);//"content/tileset/ClockTowerTileset.png",
@@ -219,7 +218,7 @@ void Player::setWantsToJump(bool value) {
 
 void Player::attack() {
 	playAnimation("attack");
-	_whip.setVisible(true);
+	_whip.setActive(true);
 }
 
 void Player::draw(Graphics &graphics) {

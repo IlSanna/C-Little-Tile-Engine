@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\animatedSprite.cpp" />
+    <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\level.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\sprite.cpp" />
@@ -34,6 +35,7 @@
   <ItemGroup>
     <ClInclude Include="headers\animatedSprite.h" />
     <ClInclude Include="headers\door.h" />
+    <ClInclude Include="headers\enemy.h" />
     <ClInclude Include="headers\game.h" />
     <ClInclude Include="headers\globals.h" />
     <ClInclude Include="headers\graphics.h" />

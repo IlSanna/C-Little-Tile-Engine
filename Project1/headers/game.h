@@ -18,6 +18,7 @@ private:
 	Player _player;
 	Level _level;
 	Graphics _graphics;
+	
 
 	bool retflag;
 };

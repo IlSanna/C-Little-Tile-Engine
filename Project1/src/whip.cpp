@@ -9,12 +9,13 @@ Whip::Whip(Graphics & graphics, Vector2 spawnPoint) :
 	_dy(0),
 	_facing(RIGHT)
 {
+	setVisible(false);
 	setupAnimation();
 	playAnimation("IdleLeft");
 }
 
 void Whip::update(float elapsedTime, float x, float y, Direction facing) {
-	if (getVisible()) {
+	if (_isActive) {
 		_x = facing == Direction::RIGHT ?
 			 x + 16 * globals::SPRITE_SCALE:
 			 x - 22 * globals::SPRITE_SCALE;//16-22=6 bb size is 22, so in this case 16+6=22
@@ -26,15 +27,13 @@ void Whip::update(float elapsedTime, float x, float y, Direction facing) {
 			(_sourceRect.w - 1) * globals::SPRITE_SCALE,
 			(_sourceRect.h - 1)* globals::SPRITE_SCALE
 		);
-
-		//AnimatedSprite::update(elapsedTime);
+		_timeElapsed += elapsedTime;
+		if (_timeElapsed > 1000 / 6) {//6 is firerate
+			_timeElapsed = 0;
+			_isActive = false;
+			setVisible(false);
+		}
 	}
-	//_timeElapsed += elapsedTime;
-	//if (_timeElapsed > _timeToUpdate) {//managing the fire rate
-	//	_timeElapsed -= _timeToUpdate;
-	//	
-	//	setVisible(false);
-	//}
 }
 void Whip::draw(Graphics & graphics) {
 	AnimatedSprite::draw(graphics, _x, _y);
@@ -76,4 +75,17 @@ void Whip::setX(float value) {
 }
 void Whip::setY(float value) {
 	_y = value;
+}
+
+void Whip::setActive(bool value) {
+	if (value) {
+		setVisible(true);
+		_isActive = value;
+	}
+	else {
+		_isActive = value;
+	}
+}
+bool Whip::getActive() {
+	return _isActive;
 }

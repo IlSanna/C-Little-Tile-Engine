@@ -16,6 +16,8 @@ public:
 
 	void setX(float value);
 	void setY(float value);
+	void setActive(bool value);
+	bool getActive(); 
 private:
 	float _dx = 4;
 	float _dy;//deltaX and deltaY, the change in x and y direction
@@ -23,4 +25,5 @@ private:
 	double _timeElapsed = 0;
 	Direction _facing;
 	Vector2 _lastPos;
+	bool _isActive = false;
 };
