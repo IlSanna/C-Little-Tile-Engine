@@ -35,6 +35,15 @@ std::vector<Rectangle> Level::checkSlopeRectCollision(const Rectangle &other) {
 	}
 	return collisions;
 }
+std::vector<Enemy*> Level::checkEnemyCollision(const Rectangle& other) {
+	std::vector<Enemy*> collisions;
+	for (int i = 0; i < _enemiesList.size(); i++) {
+		if (_enemiesList.at(i)->getBoundingBox().collideWith(other)) {//if other is colliding with one of them
+			collisions.push_back(_enemiesList.at(i));//add it to the collision list
+		}
+	}
+	return collisions;
+}
 std::vector<Slope> Level::checkSlopeCollision(const Rectangle & other) {
 	std::vector<Slope> collisions;
 	for (int i = 0; i < _collisionSlopes.size(); i++) {//loop throug the vector of collision extracted from file

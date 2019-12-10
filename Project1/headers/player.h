@@ -24,6 +24,7 @@ public:
 	void handleSlopeRectCollision(std::vector<Rectangle>& others);
 	void handleSlopeCollision(std::vector<Slope> &others);
 	void handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
+	void handleEnemyCollisions(std::vector<Enemy*>& others);
 
 	const float getX() const;
 	const float getY() const;

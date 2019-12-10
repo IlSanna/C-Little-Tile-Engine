@@ -200,6 +200,13 @@ void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graph
 	}
 }
 
+void Player::handleEnemyCollisions(std::vector<Enemy*>& others) {
+	for (int i = 0; i < others.size(); i++) {
+		std::cout << "ai" << std::endl;
+		//others.at(i)->touchPlayer(this);
+	}
+}
+
 const float Player::getX() const {
 	return _x;
 }

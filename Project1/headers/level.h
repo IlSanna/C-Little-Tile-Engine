@@ -33,6 +33,7 @@ public:
 
 	std::vector<Rectangle> checkTileCollision(const Rectangle &other);
 	std::vector<Rectangle> checkSlopeRectCollision(const Rectangle & other);
+	std::vector<Enemy*> checkEnemyCollision(const Rectangle& other);
 	std::vector<Slope> checkSlopeCollision(const Rectangle &other);
 	std::vector<Door> checkDoorsCollision(const Rectangle &other);
 

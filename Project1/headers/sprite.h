@@ -13,7 +13,7 @@ public:
 	virtual void update();
 	void draw(Graphics &graphics, int x, int y);
 
-	const Rectangle getBoundingBox() const;
+	Rectangle getBoundingBox() ;
 	const sides::Side getCollisionSide(Rectangle &other) const;
 protected:
 	SDL_Rect _sourceRect;

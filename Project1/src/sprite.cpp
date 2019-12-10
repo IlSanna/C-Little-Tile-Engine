@@ -42,7 +42,7 @@ void Sprite::draw(Graphics & graphics, int x, int y) {
 	graphics.blitSurface(_spriteSheet, &_sourceRect, &destinationRectangle);
 }
 
-const Rectangle Sprite::getBoundingBox() const {
+Rectangle Sprite::getBoundingBox() {
 	return _boundingBox;
 }
 //determine on which side we are colliding
