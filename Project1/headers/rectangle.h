@@ -28,7 +28,7 @@ public:
 				sides::NONE;
 	}
 	//AABB test
-	const bool collideWith(const Rectangle &other) {
+	const bool collideWith(const Rectangle &other) const{
 		return  getRight() >= other.getLeft() &&
 				getBottom() >= other.getTop() &&
 				other.getRight() >= getLeft() &&
