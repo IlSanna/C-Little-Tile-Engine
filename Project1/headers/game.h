@@ -13,7 +13,7 @@ private:
 	void gameLoop();
 	void handleInput(Input &input, bool &retflag);
 	void draw(Graphics &graphics);
-	void update(float elapsedTime);
+	void update(float elapsedTime, Input& input);
 
 	Player _player;
 	Level _level;

@@ -51,7 +51,7 @@ while (true) {
 	int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 	//i have to pass to update the elapsed time and this value need to be
 	//bounded between elapsed time and max frame time
-	update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
+	update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME),input);
 	LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
 	draw(graphics);
@@ -77,13 +77,14 @@ void Game::handleInput(Input& input, bool& retflag) {
 	} else if (input.wasKeyReleased(SDL_SCANCODE_RETURN)) {
 
 	}
+
 	if (!input.isKeyHeld(SDL_SCANCODE_A) && !input.isKeyHeld(SDL_SCANCODE_D)) {
 		_player.stopMoving();
 	}
 	retflag = false;
 }
 
-void Game::update(float elapsedTime) {
+void Game::update(float elapsedTime, Input& input) {
 	_player.update(elapsedTime);
 	_level.update(elapsedTime, _player);
 
@@ -119,12 +120,14 @@ void Game::update(float elapsedTime) {
 	//check enemy, fallo solo se il timer invincibility è attivo
 	
 	//if (_player.getTime() > 1000 / 6) {//pensare qui
-		if ((otherEnemies = _level.checkEnemyCollision(_player.getBoundingBox())).size() > 0 
+		/*if ((otherEnemies = _level.checkEnemyCollision(_player.getBoundingBox())).size() > 0 
 			&& _player.getVulnerability()) {
 			_player.handleEnemyCollisions(otherEnemies,elapsedTime);
-		}
+		}*/
 	//}
-	
+	if (input.wasKeyPressed(SDL_SCANCODE_G) && _player.getVulnerability()) {
+		_player.handleEnemyCollisions(otherEnemies, elapsedTime);
+	}
 	//Check doors
 	if ((otherDoors = _level.checkDoorsCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleDoorsCollision(otherDoors,_level,_graphics);

@@ -87,7 +87,7 @@ void Player::update(float elapsedTime) {
 	AnimatedSprite::update(elapsedTime);
 
 	//_timeElapsed += elapsedTime;
-	std::cout <<"vulnerable = "<<_isVulnerable<< " health: " << _health << std::endl;
+	//std::cout <<"vulnerable = "<<_isVulnerable<< " health: " << _health << std::endl;
 	_whip.update(elapsedTime, _x , _y,_facing);
 }
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
@@ -202,22 +202,25 @@ void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graph
 	}
 }
 void Player::handleEnemyCollisions(std::vector<Enemy*>& others,float elapsedTime) {
+	std::cout << "vulnerable = " << _isVulnerable << " health: " << _health << std::endl;
 	_isVulnerable = false;
-	_timer = elapsedTime;//hit time
-	if (_timer - _timeElapsed > 300) {
-		_timeElapsed += elapsedTime;
-		for (int i = 0; i < others.size(); i++) {
-			std::cout << "ai" << std::endl;
-			//resetta il timer
-			//_timeElapsed = 0;
-			//logica health
-			_health--;
-			//others.at(i)->touchPlayer(this);
-		}
-	} else {
-		_isVulnerable = true
+	if (!_isVulnerable) {//potrei tenere un timer a parte, che mi tiene vulnerable
+		//consigliano di avere un timer che va decrementando, se è diverso da zero allora è vulnerabile
+		//http://lazyfoo.net/SDL_tutorials/lesson12/index.php
+		std::cout << "ai" << std::endl;
+		_health--;
+		//for (int i = 0; i < others.size(); i++) {
+		//	std::cout << "ai" << std::endl;
+		//	//resetta il timer
+		//	//_timeElapsed = 0;
+		//	//logica health
+		//	_health--;
+		//	//others.at(i)->touchPlayer(this);
+		//}
 	}
+	_isVulnerable = true;
 	
+	std::cout << "vulnerable = " << _isVulnerable << " health: " << _health << std::endl;
 }
 
 const float Player::getX() const {
