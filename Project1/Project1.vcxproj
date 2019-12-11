@@ -29,6 +29,7 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\tile.cpp" />
+    <ClCompile Include="src\Timer.cpp" />
     <ClCompile Include="src\tinyxml2.cpp" />
     <ClCompile Include="src\whip.cpp" />
   </ItemGroup>
@@ -46,6 +47,7 @@
     <ClInclude Include="headers\slope.h" />
     <ClInclude Include="headers\sprite.h" />
     <ClInclude Include="headers\Tile.h" />
+    <ClInclude Include="headers\Timer.h" />
     <ClInclude Include="headers\tinyxml2.h" />
     <ClInclude Include="headers\whip.h" />
   </ItemGroup>

@@ -376,7 +376,7 @@ void Level::addSlopeRectangle(tinyxml2::XMLElement * pObject, std::string value 
 
 void Level::update(float elapsedTime, Player &player) {
 	for (int i = 0; i <  _enemiesList.size(); i++) {
-		_enemiesList.at(i)->update(elapsedTime, player);
+		//_enemiesList.at(i)->update(elapsedTime, player);
 	}
 }
 

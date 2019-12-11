@@ -49,6 +49,9 @@
     <ClCompile Include="src\enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\input.h">
@@ -72,6 +75,7 @@
     <ClInclude Include="headers\door.h" />
     <ClInclude Include="headers\whip.h" />
     <ClInclude Include="headers\enemy.h" />
+    <ClInclude Include="headers\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\sprite\MyChar.png" />

@@ -4,6 +4,7 @@
 #include "slope.h"
 #include "level.h"
 #include "whip.h"
+#include "Timer.h"
 
 class Player : public AnimatedSprite {
 public:
@@ -33,7 +34,6 @@ public:
 	void setWantsToJump(bool value);
 	void attack();
 
-	double getTime() { return _timeElapsed; }
 	bool getVulnerability() { return _isVulnerable; }
 private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
@@ -44,7 +44,8 @@ private:
 	Whip _whip;
 
 	int _health = 3;
-	double _timeElapsed = 0;
-	double _timer = 0;
+
 	bool _isVulnerable = true;
+	Timer* _invincibilityTimer;
+	float _lastHitTime = 0;
 };

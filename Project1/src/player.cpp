@@ -23,6 +23,9 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) :
 
 	_whip = Whip(graphics, Vector2(_x+32, _y));
 	//_whip.setVisible(false);
+
+	_invincibilityTimer = Timer::Instance();
+	_lastHitTime = 0;
 }
 
 void Player::moveLeft() {
@@ -65,6 +68,15 @@ void Player::setupAnimation() {
 void Player::animationDone(std::string currentAnimation) {
 }
 void Player::update(float elapsedTime) {
+	_invincibilityTimer->Update();
+
+	//invulnerability
+	if (_invincibilityTimer->DeltaTime() - _lastHitTime > 1) {
+		SDL_SetTextureAlphaMod(_spriteSheet, Uint8(255));
+		if ((_invincibilityTimer->DeltaTime() - _lastHitTime > 1.5f)) {
+			_isVulnerable = true;
+		}
+	}
 	//apply gravity
 	if (_dy <= player_constant::GRAVITY_CAP) {
 		_dy += player_constant::GRAVITY * elapsedTime;
@@ -85,9 +97,12 @@ void Player::update(float elapsedTime) {
 	);
 	
 	AnimatedSprite::update(elapsedTime);
+	
+	
+	if (!_isVulnerable) {
+		//flicker
+	}
 
-	//_timeElapsed += elapsedTime;
-	//std::cout <<"vulnerable = "<<_isVulnerable<< " health: " << _health << std::endl;
 	_whip.update(elapsedTime, _x , _y,_facing);
 }
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
@@ -202,25 +217,14 @@ void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graph
 	}
 }
 void Player::handleEnemyCollisions(std::vector<Enemy*>& others,float elapsedTime) {
-	std::cout << "vulnerable = " << _isVulnerable << " health: " << _health << std::endl;
 	_isVulnerable = false;
-	if (!_isVulnerable) {//potrei tenere un timer a parte, che mi tiene vulnerable
-		//consigliano di avere un timer che va decrementando, se è diverso da zero allora è vulnerabile
-		//http://lazyfoo.net/SDL_tutorials/lesson12/index.php
-		std::cout << "ai" << std::endl;
-		_health--;
-		//for (int i = 0; i < others.size(); i++) {
-		//	std::cout << "ai" << std::endl;
-		//	//resetta il timer
-		//	//_timeElapsed = 0;
-		//	//logica health
-		//	_health--;
-		//	//others.at(i)->touchPlayer(this);
-		//}
-	}
-	_isVulnerable = true;
+	_lastHitTime = _invincibilityTimer->DeltaTime();
 	
-	std::cout << "vulnerable = " << _isVulnerable << " health: " << _health << std::endl;
+	for (int i = 0; i < others.size(); i++) {
+		_health--;
+	}
+	std::cout << " health: " << _health << std::endl;
+	SDL_SetTextureAlphaMod(_spriteSheet, Uint8(175));
 }
 
 const float Player::getX() const {

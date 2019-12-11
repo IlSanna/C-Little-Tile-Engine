@@ -42,7 +42,7 @@
 0,0,610,610,610,610,610,610,610,610,610,610,610,610,610,610,0,0,0,0
 </data>
  </layer>
- <objectgroup color="#ff0000" id="3" name="CollidableTiles" visible="0">
+ <objectgroup color="#ff0000" id="3" name="CollidableTiles">
   <object id="18" x="0" y="48" width="16" height="64"/>
   <object id="19" x="16" y="48" width="64" height="16"/>
   <object id="20" x="80" y="32" width="192" height="16"/>
@@ -57,7 +57,7 @@
   <object id="51" x="208" y="144" width="16" height="16"/>
  </objectgroup>
  <objectgroup color="#aa007f" id="8" name="Enemies">
-  <object id="52" x="64" y="192">
+  <object id="52" x="64" y="208">
    <point/>
   </object>
   <object id="53" x="112" y="96">
@@ -95,7 +95,7 @@
   </object>
  </objectgroup>
  <objectgroup color="#00007f" id="5" name="SpawnPoint">
-  <object id="16" x="208" y="112">
+  <object id="16" x="96" y="208">
    <point/>
   </object>
  </objectgroup>
