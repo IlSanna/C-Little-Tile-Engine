@@ -116,10 +116,15 @@ void Game::update(float elapsedTime) {
 	//	_player.handleSlopeCollision(otherSlopes);
 	//}
 
-	//check enemy
-	if ((otherEnemies = _level.checkEnemyCollision(_player.getBoundingBox())).size() > 0){
-		_player.handleEnemyCollisions(otherEnemies);
-	}
+	//check enemy, fallo solo se il timer invincibility è attivo
+	
+	//if (_player.getTime() > 1000 / 6) {//pensare qui
+		if ((otherEnemies = _level.checkEnemyCollision(_player.getBoundingBox())).size() > 0 
+			&& _player.getVulnerability()) {
+			_player.handleEnemyCollisions(otherEnemies,elapsedTime);
+		}
+	//}
+	
 	//Check doors
 	if ((otherDoors = _level.checkDoorsCollision(_player.getBoundingBox())).size() > 0) {
 		_player.handleDoorsCollision(otherDoors,_level,_graphics);
@@ -129,8 +134,8 @@ void Game::update(float elapsedTime) {
 
 void Game::draw(Graphics &graphics) {
 	graphics.clear();
-	_level.draw(graphics);
-	_player.draw(graphics);
+	//_level.draw(graphics);
+	//_player.draw(graphics);
 	graphics.display();
 }
 

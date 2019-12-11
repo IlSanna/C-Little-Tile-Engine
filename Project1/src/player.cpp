@@ -85,7 +85,9 @@ void Player::update(float elapsedTime) {
 	);
 	
 	AnimatedSprite::update(elapsedTime);
-	
+
+	//_timeElapsed += elapsedTime;
+	std::cout <<"vulnerable = "<<_isVulnerable<< " health: " << _health << std::endl;
 	_whip.update(elapsedTime, _x , _y,_facing);
 }
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
@@ -199,12 +201,23 @@ void Player::handleDoorsCollision(std::vector<Door> &others, Level &level, Graph
 		_y = level.getPlayerSpawnPoint().y;
 	}
 }
-
-void Player::handleEnemyCollisions(std::vector<Enemy*>& others) {
-	for (int i = 0; i < others.size(); i++) {
-		std::cout << "ai" << std::endl;
-		//others.at(i)->touchPlayer(this);
+void Player::handleEnemyCollisions(std::vector<Enemy*>& others,float elapsedTime) {
+	_isVulnerable = false;
+	_timer = elapsedTime;//hit time
+	if (_timer - _timeElapsed > 300) {
+		_timeElapsed += elapsedTime;
+		for (int i = 0; i < others.size(); i++) {
+			std::cout << "ai" << std::endl;
+			//resetta il timer
+			//_timeElapsed = 0;
+			//logica health
+			_health--;
+			//others.at(i)->touchPlayer(this);
+		}
+	} else {
+		_isVulnerable = true
 	}
+	
 }
 
 const float Player::getX() const {

@@ -24,7 +24,7 @@ public:
 	void handleSlopeRectCollision(std::vector<Rectangle>& others);
 	void handleSlopeCollision(std::vector<Slope> &others);
 	void handleDoorsCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
-	void handleEnemyCollisions(std::vector<Enemy*>& others);
+	void handleEnemyCollisions(std::vector<Enemy*>& others, float elapsedTime);
 
 	const float getX() const;
 	const float getY() const;
@@ -32,6 +32,9 @@ public:
 	Whip getWhip();
 	void setWantsToJump(bool value);
 	void attack();
+
+	double getTime() { return _timeElapsed; }
+	bool getVulnerability() { return _isVulnerable; }
 private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;
@@ -39,4 +42,9 @@ private:
 	bool _wantsToJump;
 	bool _grounded = false;
 	Whip _whip;
+
+	int _health = 3;
+	double _timeElapsed = 0;
+	double _timer = 0;
+	bool _isVulnerable = true;
 };
