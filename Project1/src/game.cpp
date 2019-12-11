@@ -106,11 +106,11 @@ void Game::update(float elapsedTime, Input& input) {
 	}
 	
 	////check whip dovrei fare check enemy
-	//if (_player.getWhip().getActive()) {
-	//	if ((others = _level.checkTileCollision(_player.getWhip().getBoundingBox())).size() > 0) {
-	//		_player.getWhip().handleTileCollision(others);
-	//	}
-	//}
+	if (_player.getWhip().getActive()) {
+		if ((otherEnemies = _level.checkEnemyCollision(_player.getWhip().getBoundingBox())).size() > 0) {
+			_player.getWhip().handleEnemyCollisions(otherEnemies, elapsedTime);
+		}
+	}
 
 	//Check slopes
 	//if ((otherSlopes = _level.checkSlopeCollision(_player.getBoundingBox())).size() > 0) {

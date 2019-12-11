@@ -248,6 +248,10 @@ void Player::attack() {
 	_whip.setActive(true);
 }
 
+bool Player::getVulnerability() {
+	return _isVulnerable;
+}
+
 void Player::draw(Graphics &graphics) {
 	
 	AnimatedSprite::draw(graphics, _x, _y);//this _x and _y came from sprite.h

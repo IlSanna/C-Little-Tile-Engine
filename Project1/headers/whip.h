@@ -2,6 +2,8 @@
 #include "graphics.h"
 #include "animatedSprite.h"
 
+class Enemy;
+
 class Whip : public AnimatedSprite {
 public:
 	Whip();
@@ -12,7 +14,7 @@ public:
 	virtual void setupAnimation();
 	virtual void animationDone(std::string currentAnimation);
 	
-	void handleTileCollision(std::vector<Rectangle> &others);
+	void handleEnemyCollisions(std::vector<Enemy*>& others, float elapsedTime);
 
 	void setX(float value);
 	void setY(float value);

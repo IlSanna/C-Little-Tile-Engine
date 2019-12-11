@@ -1,24 +1,29 @@
 #include "../headers/whip.h"
-
+#include "../headers/enemy.h"
 Whip::Whip() {
 }
 
 Whip::Whip(Graphics & graphics, Vector2 spawnPoint) :
-	AnimatedSprite(graphics, "content/sprite/prov.png", 0, 0, 22, 8, spawnPoint.x, spawnPoint.y, 0),//shouldbe 16
+	AnimatedSprite(graphics, "content/sprite/whip.png", 0, 0, 23, 8, spawnPoint.x, spawnPoint.y, 0),//shouldbe 16
 	_dx(0),
 	_dy(0),
 	_facing(RIGHT)
 {
 	setVisible(false);
 	setupAnimation();
-	playAnimation("IdleLeft");
+	playAnimation("Right");
 }
 
 void Whip::update(float elapsedTime, float x, float y, Direction facing) {
 	if (_isActive) {
-		_x = facing == Direction::RIGHT ?
-			 x + 16 * globals::SPRITE_SCALE:
-			 x - 22 * globals::SPRITE_SCALE;//16-22=6 bb size is 22, so in this case 16+6=22
+		if (facing == Direction::RIGHT) {
+			_x = x + 14 * globals::SPRITE_SCALE;
+			playAnimation("Right");
+		}
+		else {
+			_x = x - 23 * globals::SPRITE_SCALE;
+			playAnimation("Left");
+		}
 		_y = y + 8 * globals::SPRITE_SCALE;
 		//update BB position
 		_boundingBox = Rectangle(
@@ -39,34 +44,15 @@ void Whip::draw(Graphics & graphics) {
 	AnimatedSprite::draw(graphics, _x, _y);
 }
 void Whip::setupAnimation() {
-	addAnimation(1, 0, 0, "IdleLeft", 22, 8, Vector2(0, 0));
+	addAnimation(1, 0, 0, "Right", 46, 16, Vector2(0, 0));
+	addAnimation(1, 0, 16, "Left", 46, 16, Vector2(0, 0));
 }
 void Whip::animationDone(std::string currentAnimation) {
 }
-void Whip::handleTileCollision(std::vector<Rectangle>& others) {
+void Whip::handleEnemyCollisions(std::vector<Enemy*>& others, float elapsedTime) {
 	for (int i = 0; i < others.size(); i++) {
-		std::cout << std::endl;
-		sides::Side collisionSide = getCollisionSide(others.at(i));
-		if (collisionSide != sides::NONE) {
-			switch (collisionSide) {
-			case sides::TOP:
-				std::cout << " TOP ";
-				_dy = 0;
-				_y = others.at(i).getBottom() + 1;
-				break;
-			case sides::BOTTOM:
-				std::cout << " BOTTOM TILE";
-				_y = others.at(i).getTop() - _boundingBox.getHeight() - 1;
-				break;
-			case sides::LEFT:
-				std::cout << " LEFT TILE";
-				_x = others.at(i).getRight() + 1;
-				break;
-			case sides::RIGHT:
-				std::cout << " RIGHT TILE";
-				_x = others.at(i).getLeft() - _boundingBox.getWidth() - 1;
-				break;
-			}
+		if (others.at(i)->getVulnerability()) {
+			others.at(i)->takeDamage(1);
 		}
 	}
 }

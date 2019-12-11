@@ -34,7 +34,7 @@ public:
 	void setWantsToJump(bool value);
 	void attack();
 
-	bool getVulnerability() { return _isVulnerable; }
+	bool getVulnerability(); 
 private:
 	float _dx, _dy;//deltaX and deltaY, the change in x and y direction
 	Direction _facing;
