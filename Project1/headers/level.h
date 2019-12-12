@@ -6,7 +6,6 @@
 #include "tinyxml2.h"
 #include <fstream>
 #include "rectangle.h"
-#include "slope.h"
 #include "door.h"
 
 class Enemy;
@@ -34,12 +33,10 @@ public:
 	std::vector<Rectangle> checkTileCollision(const Rectangle &other);
 	std::vector<Rectangle> checkSlopeRectCollision(const Rectangle & other);
 	std::vector<Enemy*> checkEnemyCollision(const Rectangle& other);
-	std::vector<Slope> checkSlopeCollision(const Rectangle &other);
 	std::vector<Door> checkDoorsCollision(const Rectangle &other);
 
 	const Vector2 getPlayerSpawnPoint() const;
 private:
-	//std::string _tilesetPath;
 	std::string _mapNameInfo;
 	Vector2 _spawnPoint;
 
@@ -51,7 +48,6 @@ private:
 	std::vector<Tileset> _tileSets;
 	std::vector<Rectangle> _collisionRect;
 	std::vector<Rectangle> _slopesRect;
-	std::vector<Slope> _collisionSlopes;
 	std::vector<Door> _doorList;
 	std::vector<Enemy*> _enemiesList;
 

@@ -33,13 +33,11 @@ void Player::moveLeft() {
 	playAnimation("RunLeft");
 	_facing = LEFT; 
 }
-
 void Player::moveRight() {
 	_dx = player_constant::WALK_SPEED;
 	playAnimation("RunRight");
 	_facing = RIGHT;
 }
-
 void Player::stopMoving() {
 	_dx = 0.0f;
 	playAnimation(_facing == RIGHT ? "IdleRight" : "IdleLeft");
@@ -67,6 +65,7 @@ void Player::setupAnimation() {
 
 void Player::animationDone(std::string currentAnimation) {
 }
+
 void Player::update(float elapsedTime) {
 	_invincibilityTimer->Update();
 
@@ -105,6 +104,7 @@ void Player::update(float elapsedTime) {
 
 	_whip.update(elapsedTime, _x , _y,_facing);
 }
+
 void Player::handleTileCollision(std::vector<Rectangle>& others) {
 	//look for which side is the player colliding with and move accordingly
 	for (int i = 0; i < others.size(); i++) {
@@ -184,28 +184,6 @@ void Player::handleSlopeRectCollision(std::vector<Rectangle>& others) {
 				_dx = 0;
 				_x -= _facing == RIGHT ? 1.0f : -1.0f;
 			}
-		}
-	}
-}
-void Player::handleSlopeCollision(std::vector<Slope> &others) {
-	for (int i = 0; i < others.size(); i++) {
-		//Calculate where on the slope the player's bottom center is touching
-		//and use y=mx+b to figure out the y position to place him at
-		//First calculate "b" (slope intercept) using one of the points (b = y - mx)
-		//std::cout << others.at(i).getP1().y << " - ( " << others.at(i).getSlope() << " * " << fabs(others.at(i).getP1().x) << std::endl;
-
-		int b = (others.at(i).getP1().y - (others.at(i).getSlope() * fabs(others.at(i).getP1().x)));
-
-		//Now get player's center x
-		int centerX = _boundingBox.getCenterX();
-
-		//Now pass that X into the equation y = mx + b (using our newly found b and x) to get the new y position
-		int newY = (others.at(i).getSlope() * centerX) + b -16; //8 is temporary to fix a problem
-		//std::cout << "newY= "<<newY<<" b = "<<b<<" centerX = "<<centerX << std::endl;
-		//Re-position the player to the correct "y"
-		if (_grounded) {
-			_y = newY - _boundingBox.getHeight();
-			_grounded = true;
 		}
 	}
 }

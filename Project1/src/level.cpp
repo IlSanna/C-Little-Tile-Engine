@@ -1,5 +1,4 @@
 #include "../headers/level.h"
-
 #include "../headers/enemy.h"
 
 using namespace tinyxml2;
@@ -7,13 +6,11 @@ using namespace tinyxml2;
 Level::Level() {
 }
 
-Level::Level(std::string mapNameInfo, Graphics &graphics) ://std::string tilesetPath
-	//_tilesetPath(tilesetPath),
+Level::Level(std::string mapNameInfo, Graphics &graphics) :
 	_mapNameInfo(mapNameInfo),
 	_size(Vector2(0,0)) 
 {
-	//SDL_Texture* tileset = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(_tilesetPath));
-	loadMapInfo(_mapNameInfo, graphics);//,tileset
+	loadMapInfo(_mapNameInfo, graphics);
 }
 
 //returns a vector of collision rectangles based on the precompiled level collisions
@@ -40,15 +37,6 @@ std::vector<Enemy*> Level::checkEnemyCollision(const Rectangle& other) {
 	for (int i = 0; i < _enemiesList.size(); i++) {
 		if (_enemiesList.at(i)->getBoundingBox().collideWith(other)) {//if other is colliding with one of them
 			collisions.push_back(_enemiesList.at(i));//add it to the collision list
-		}
-	}
-	return collisions;
-}
-std::vector<Slope> Level::checkSlopeCollision(const Rectangle & other) {
-	std::vector<Slope> collisions;
-	for (int i = 0; i < _collisionSlopes.size(); i++) {//loop throug the vector of collision extracted from file
-		if (_collisionSlopes.at(i).collideWith(other)) {//if other is colliding with one of them
-			collisions.push_back(_collisionSlopes.at(i));//add it to the collision list
 		}
 	}
 	return collisions;
@@ -113,9 +101,10 @@ void Level::loadMapInfo(std::string mapName, Graphics &graphics) {//, SDL_Textur
 	}
 }
 
-//parse the pdata element to find the gid number, then
+/*parse the pdata element to find the gid number, then
 //based on that it finds the correct world position
 //then it created the tile object
+*/
 void Level::extractTileInfo(tinyxml2::XMLElement * pData, std::vector<Tileset> tilesets) {
 	std::string temp = pData->GetText();
 	std::istringstream split(temp);
@@ -149,8 +138,9 @@ void Level::extractTileInfo(tinyxml2::XMLElement * pData, std::vector<Tileset> t
 	}
 }
 
-//finds the position of the specific gid on the tileset and 
-//create a tile object with the given world position
+/*finds the position of the specific gid on the tileset and 
+create a tile object with the given world position
+*/
 void Level::setTile(Tileset tileset, int currentGid, const Vector2 &finalTilePosition) {
 	int tilesetWidth, tilesetHeight;
 	SDL_QueryTexture(tileset.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
@@ -166,10 +156,8 @@ void Level::setTile(Tileset tileset, int currentGid, const Vector2 &finalTilePos
 	Tile tile(tileset.Texture, Vector2(_tileSize.x, _tileSize.y), finalTilesetPosition, finalTilePosition);
 	_tileList.push_back(tile);
 }
-//END of loading graphic informations
 
-//parse each objets layer from tiled xml
-//different behaviours depending on the objects names
+//parse each objets layer from tiled xml,different behaviours depending on the objects names
 void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup,Graphics &graphics) {
 	while (pObjectGroup) {//loop through each object groups
 		const char* name = pObjectGroup->Attribute("name");
@@ -238,60 +226,6 @@ void Level::loadTiledObjects(tinyxml2::XMLElement * pObjectGroup,Graphics &graph
 						std::ceil(y) * globals::SPRITE_SCALE);
 					//std::cout << "bat at: " << temp.x<<temp.y << std::endl;
 					_enemiesList.push_back(new Bat(graphics, temp));
-
-					pObject = pObject->NextSiblingElement("object");
-				}
-			}
-		}
-		if (ss.str() == "Slopes") {
-			XMLElement* pObject = pObjectGroup->FirstChildElement("object");
-			if (pObject) {
-				while (pObject) {//loop through each object
-					float p1X = pObject->FloatAttribute("x");
-					float p1Y = pObject->FloatAttribute("y");
-					Vector2 p = Vector2(std::ceil(p1X), std::ceil(p1Y));
-
-					XMLElement* pLine = pObject->FirstChildElement("polyline");
-					if (pLine) {
-						//read points
-						std::vector<Vector2> points;
-						std::vector<float> singlePoints;//vector with single points
-						std::string temp = pLine->Attribute("points");
-						std::istringstream split(temp);
-						std::string pair;
-						while (getline(split, pair, ' ')) {//split by whitespaces
-							std::istringstream split2(pair);
-							std::string single;
-							while (getline(split2, single, ',')) {//split by commas
-								//THINK ABOUT IF IT'S NEGATIVE MAYBE IS BETTER TO FLOOR INSTEAD OF CEIL
-								//singlePoints.push_back(std::ceil(stof(single)));
-								singlePoints.push_back( stof(single) > 0 ?
-									std::ceil(stof(single)) :
-									std::floor(stof(single))
-								);
-							}
-						}
-						for (int i = 0; i < singlePoints.size(); i+=2) {//add the single points to the vector of points
-							Vector2 tempVec = Vector2(singlePoints.at(i), singlePoints.at(i + 1));
-							points.push_back(tempVec);
-						}
-						//create the slopes
-						for (int i = 0; i < points.size() -1; i++) {
-							_collisionSlopes.push_back(
-								/*Slope(Vector2(p.x + points.at(i < 2 ? i : i - 1).x * globals::SPRITE_SCALE,
-											  p.y + points.at(i < 2 ? i : i - 1).y * globals::SPRITE_SCALE),
-									  Vector2(p.x + points.at(i < 2 ? i + 1 : i).x * globals::SPRITE_SCALE,
-										      p.y + points.at(i < 2 ? i + 1 : i).y * globals::SPRITE_SCALE)
-								)*/
-								
-								Slope(Vector2((p.x + points.at(i).x) * globals::SPRITE_SCALE,
-											  (p.y + points.at(i).y) * globals::SPRITE_SCALE),
-									  Vector2((p.x + points.at( i + 1 ).x) * globals::SPRITE_SCALE,
-											  (p.y + points.at( i + 1 ).y) * globals::SPRITE_SCALE)
-								)
-							);
-						}
-					}//end of p line
 
 					pObject = pObject->NextSiblingElement("object");
 				}
