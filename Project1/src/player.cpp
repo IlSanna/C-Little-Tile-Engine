@@ -12,20 +12,21 @@ Player::Player() {
 }
 
 Player::Player(Graphics &graphics, Vector2 spawnPoint) :
-	AnimatedSprite(graphics, "content/sprite/simonTemplate.png", 0, 0, 16, 32, spawnPoint.x, spawnPoint.y, 160),//shouldbe 16
+	AnimatedSprite(graphics, "content/sprite/simonFinal.png", 0, 0, 16, 32, spawnPoint.x, spawnPoint.y, 160),//shouldbe 16
 	_dx(0),
 	_dy(0),
 	_facing(RIGHT),
-	_grounded(false),_wantsToJump(false)
+	_grounded(false),
+	_wantsToJump(false),
+	_lastHitTime(0),
+	_isAttacking(false)
 {
 	setupAnimation();
 	playAnimation("RunLeft");
 
 	_whip = Whip(graphics, Vector2(_x+32, _y));
-	//_whip.setVisible(false);
 
 	_invincibilityTimer = Timer::Instance();
-	_lastHitTime = 0;
 }
 
 void Player::moveLeft() {
@@ -40,14 +41,16 @@ void Player::moveRight() {
 }
 void Player::stopMoving() {
 	_dx = 0.0f;
-	playAnimation(_facing == RIGHT ? "IdleRight" : "IdleLeft");
+	if (!_isAttacking) {
+		playAnimation(_facing == RIGHT ? "IdleRight" : "IdleLeft");
+	}
 }
 
 void Player::jump() {
 	
 	if (_grounded) {
 		_grounded = false;
-		_wantsToJump = true;
+		//_wantsToJump = true;
 		_dy = 0;
 		_dy -= player_constant::JUMP_SPEED;
 		
@@ -60,10 +63,12 @@ void Player::setupAnimation() {
 	addAnimation(1, 0, 32, "IdleRight", 16, 32, Vector2(0, 0));
 	addAnimation(3, 0, 0, "RunLeft", 16, 32, Vector2(0, 0));
 	addAnimation(3, 0, 32, "RunRight", 16, 32, Vector2(0, 0));
-	addAnimation(3, 0, 64, "attack", 32, 32, Vector2(0, 0));
+	addAnimation(3, 0, 64, "LeftAttack", 24, 32, Vector2(-8, 0));
+	addAnimation(3, 0, 96, "RightAttack", 24, 32, Vector2(-8, 0));
 }
 
 void Player::animationDone(std::string currentAnimation) {
+	_isAttacking = false;
 }
 
 void Player::update(float elapsedTime) {
@@ -87,6 +92,8 @@ void Player::update(float elapsedTime) {
 	//groundcheck
 	_grounded = (int)_y == _lastPos.y ? true : false;
 	
+	_wantsToJump = _dy < 0 ? true : false;//forse torna al key release
+	
 	//update BB position
 	_boundingBox = Rectangle(//magic numbers to make a better BB
 		_x,// +3,
@@ -96,7 +103,6 @@ void Player::update(float elapsedTime) {
 	);
 	
 	AnimatedSprite::update(elapsedTime);
-	
 	
 	if (!_isVulnerable) {
 		//flicker
@@ -162,13 +168,15 @@ void Player::handleSlopeRectCollision(std::vector<Rectangle>& others) {
 	for (int i = 0; i < others.size(); i++) {
 		sides::Side collisionSide = getCollisionSide(others.at(i));
 		if (collisionSide != sides::TOP) {
-			if (_grounded && !_wantsToJump) {//grounded, handle on slope movement
+			if (_grounded && !_wantsToJump) {//grounded, handle on slope movement && !_wantsToJump
 				_dy = 0;
 				if (!others.at(i).isLeftSlope()) {//right slope
-					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) +2;
+					_y = others.at(i).getTop() - _boundingBox.getHeight() 
+						- (_x - others.at(i).getLeft()) +2;
 				}
 				else {//left slope
-					_y = (others.at(i).getTop() - _boundingBox.getHeight() - (2 - (_x - others.at(i).getLeft()))) + 1;
+					_y = (others.at(i).getTop() - _boundingBox.getHeight() 
+						- (2 - (_x - others.at(i).getLeft()))) + 1;
 				}
 			}
 			_lastPos.y = _y;//se tocco la slope, salvo la last pos FORSE ERRORE
@@ -218,7 +226,8 @@ void Player::setWantsToJump(bool value) {
 }
 
 void Player::attack() {
-	playAnimation("attack");
+	_isAttacking = true;
+	playAnimation(_facing == RIGHT ? "RightAttack" : "LeftAttack");
 	_whip.setActive(true);
 }
 

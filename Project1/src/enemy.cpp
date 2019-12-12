@@ -13,7 +13,6 @@ Enemy::Enemy(Graphics &graphics, std::string filePath, int sourceX, int sourceY,
 
 	_invincibilityTimer = Timer::Instance();
 	_lastHitTime = 0;
-	_die = false;
 }
 
 void Enemy::update(int elapsedTime, Player &player) {
@@ -36,7 +35,7 @@ void Enemy::takeDamage(int value) {
 	}
 	
 	
-	std::cout << "health: " << _currentHealth << std::endl;
+	//std::cout << "health: " << _currentHealth << std::endl;
 	SDL_SetTextureAlphaMod(_spriteSheet, Uint8(175));
 }
 

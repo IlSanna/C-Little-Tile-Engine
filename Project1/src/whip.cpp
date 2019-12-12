@@ -33,7 +33,7 @@ void Whip::update(float elapsedTime, float x, float y, Direction facing) {
 			(_sourceRect.h - 1)* globals::SPRITE_SCALE
 		);
 		_timeElapsed += elapsedTime;
-		if (_timeElapsed > 1000 / 6) {//6 is firerate
+		if (_timeElapsed > 1000 / 4) {//6 is firerate
 			_timeElapsed = 0;
 			_isActive = false;
 			setVisible(false);

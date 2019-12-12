@@ -43,10 +43,10 @@ void AnimatedSprite::update(float elapsedTime) {
 void AnimatedSprite::draw(Graphics &graphics, int x, int y) {
 	if (_visible) {
 		SDL_Rect destinationRectangle;
-		if (_currentAnimation == "attack") {
+		if (_currentAnimation == "RightAttack" || _currentAnimation == "LeftAttack") {//forse change
 			destinationRectangle.x = x + _offsets[_currentAnimation].x;
 			destinationRectangle.y = y + _offsets[_currentAnimation].y;
-			destinationRectangle.w = 2*_sourceRect.w * globals::SPRITE_SCALE;
+			destinationRectangle.w = 48; _sourceRect.w * globals::SPRITE_SCALE;
 			destinationRectangle.h = _sourceRect.h * globals::SPRITE_SCALE;
 		}
 		else {
@@ -63,20 +63,12 @@ void AnimatedSprite::draw(Graphics &graphics, int x, int y) {
 
 void AnimatedSprite::addAnimation(int frames, int x, int y, std::string name, int width, int height, Vector2 offset) {
 	std::vector<SDL_Rect> rectangles;
-	if (name == "attack") {
-		SDL_Rect newRect = { 0 * width, y, width, height };
-		rectangles.push_back(newRect);
-		SDL_Rect newRect1 = { 1 * width, y, width, height };
-		rectangles.push_back(newRect1);
-		SDL_Rect newRect2 = { 1* width, y, width, height };
-		rectangles.push_back(newRect2);
+
+	for (int i = 0; i < frames; i++) {
+		SDL_Rect newRect = { (i + x)*width, y, width, height };//loop through the sprite sheet row by row
+		rectangles.push_back(newRect);//add it to the vector list
 	}
-	else {
-		for (int i = 0; i < frames; i++) {
-			SDL_Rect newRect = { (i + x)*width, y, width, height };//loop through the sprite sheet row by row
-			rectangles.push_back(newRect);//add it to the vector list
-		}
-	}
+	
 	//we add this animation to the list of animations
 	_animations.insert(std::pair<std::string, std::vector<SDL_Rect>>(name, rectangles));
 	//add the relative offset of this animation to the list of offsets

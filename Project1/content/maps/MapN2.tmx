@@ -95,7 +95,7 @@
   </object>
  </objectgroup>
  <objectgroup color="#00007f" id="5" name="SpawnPoint">
-  <object id="16" x="96" y="208">
+  <object id="16" x="16" y="112">
    <point/>
   </object>
  </objectgroup>

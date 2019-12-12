@@ -70,7 +70,7 @@ void Game::handleInput(Input& input, bool& retflag) {
 	if (input.wasKeyPressed(SDL_SCANCODE_SPACE)) {
 		_player.jump();
 	} else if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
-		_player.setWantsToJump(false);
+		//_player.setWantsToJump(false);
 	}
 	if (input.wasKeyPressed(SDL_SCANCODE_RETURN)) {
 		_player.attack();

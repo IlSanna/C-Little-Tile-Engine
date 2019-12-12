@@ -46,4 +46,6 @@ private:
 	bool _isVulnerable = true;
 	Timer* _invincibilityTimer;
 	float _lastHitTime = 0;
+
+	bool _isAttacking;
 };
