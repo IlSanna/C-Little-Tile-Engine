@@ -162,22 +162,18 @@ void Player::handleSlopeRectCollision(std::vector<Rectangle>& others) {
 	for (int i = 0; i < others.size(); i++) {
 		sides::Side collisionSide = getCollisionSide(others.at(i));
 		if (collisionSide != sides::TOP) {
-			
-			if (_grounded && !_wantsToJump) {//_grounded && !_wantsToJump
+			if (_grounded && !_wantsToJump) {//grounded, handle on slope movement
 				_dy = 0;
 				if (!others.at(i).isLeftSlope()) {//right slope
 					_y = others.at(i).getTop() - _boundingBox.getHeight() - (_x - others.at(i).getLeft()) +2;
 				}
 				else {//left slope
-					_y = (others.at(i).getTop() - _boundingBox.getHeight() -
-						(2 - (_x - others.at(i).getLeft()))) + 1;
+					_y = (others.at(i).getTop() - _boundingBox.getHeight() - (2 - (_x - others.at(i).getLeft()))) + 1;
 				}
-				//_lastPos.y = _y;
 			}
-			_lastPos.y = _y;
-			//_grounded = true;
+			_lastPos.y = _y;//se tocco la slope, salvo la last pos FORSE ERRORE
 		}
-		else {
+		else {//im colliding with the slope top, so use standard collision response
 			_dy = 0;//reset gravity counter
 			_y = others.at(i).getBottom() + 1;//+1;//if we hit the ceiling reset player pos 1 pixel down the bottom of the ceiling
 			if (_grounded) {
