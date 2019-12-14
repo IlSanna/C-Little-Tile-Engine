@@ -20,9 +20,14 @@ void Game::gameLoop() {
 	Input input;
 	SDL_Event event;
 
+	_assetManager = AssetManager::Instance();
+	_audioManager = AudioManager::Instance();
+	_audioManager->PlayMusic("content/music/ostCastlevania.wav");
+
 	_level = Level("content/maps/MapN2.tmx", graphics);
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
 	_graphics = graphics;
+	
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 

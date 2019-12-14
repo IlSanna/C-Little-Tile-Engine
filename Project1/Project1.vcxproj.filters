@@ -52,6 +52,12 @@
     <ClCompile Include="src\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\input.h">
@@ -76,6 +82,8 @@
     <ClInclude Include="headers\whip.h" />
     <ClInclude Include="headers\enemy.h" />
     <ClInclude Include="headers\Timer.h" />
+    <ClInclude Include="headers\AssetManager.h" />
+    <ClInclude Include="headers\AudioManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="content\sprite\MyChar.png" />

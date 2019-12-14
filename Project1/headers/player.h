@@ -5,6 +5,8 @@
 #include "whip.h"
 #include "Timer.h"
 
+class AudioManager;
+
 class Player : public AnimatedSprite {
 public:
 	Player();
@@ -48,4 +50,5 @@ private:
 	float _lastHitTime = 0;
 
 	bool _isAttacking;
+	AudioManager* _audioManager;
 };

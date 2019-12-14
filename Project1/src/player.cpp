@@ -1,4 +1,5 @@
 #include "../headers/player.h"
+#include "../headers/AudioManager.h"
 
 namespace player_constant {
 	const float WALK_SPEED = 0.14f;
@@ -27,6 +28,7 @@ Player::Player(Graphics &graphics, Vector2 spawnPoint) :
 	_whip = Whip(graphics, Vector2(_x+32, _y));
 
 	_invincibilityTimer = Timer::Instance();
+	_audioManager = AudioManager::Instance();
 }
 
 void Player::moveLeft() {
@@ -53,8 +55,7 @@ void Player::jump() {
 		//_wantsToJump = true;
 		_dy = 0;
 		_dy -= player_constant::JUMP_SPEED;
-		
-		std::cout << "jump " << _grounded<< std::endl;
+		_audioManager->PlaySFX("content/music/jump.wav");
 	}
 }
 
@@ -68,6 +69,11 @@ void Player::setupAnimation() {
 }
 
 void Player::animationDone(std::string currentAnimation) {
+	//fare uno switch qua
+	/*if (currentAnimation == "RightAttack") {
+		_whip.setActive(true);
+
+	}*/
 	_isAttacking = false;
 }
 
@@ -203,6 +209,7 @@ void Player::handleEnemyCollisions(std::vector<Enemy*>& others,float elapsedTime
 	_lastHitTime = _invincibilityTimer->DeltaTime();
 	
 	for (int i = 0; i < others.size(); i++) {
+		_audioManager->PlaySFX("content/music/Being_Hit.wav");
 		_health--;
 	}
 	std::cout << " health: " << _health << std::endl;
@@ -227,7 +234,8 @@ void Player::setWantsToJump(bool value) {
 
 void Player::attack() {
 	_isAttacking = true;
-	playAnimation(_facing == RIGHT ? "RightAttack" : "LeftAttack");
+	//playAnimation(_facing == RIGHT ? "RightAttack" : "LeftAttack");
+	_audioManager->PlaySFX("content/music/attack.wav");
 	_whip.setActive(true);
 }
 

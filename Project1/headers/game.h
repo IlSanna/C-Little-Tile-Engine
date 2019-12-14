@@ -1,9 +1,10 @@
 #pragma once
-#include "game.h"
 #include "graphics.h"
 #include "input.h"
 #include "player.h"
 #include "level.h"
+#include "AssetManager.h"
+#include "AudioManager.h"
 
 class Game {
 public:
@@ -20,6 +21,8 @@ private:
 	Player _player;
 	Level _level;
 	Graphics _graphics;
+	AssetManager* _assetManager;
+	AudioManager* _audioManager;
 
 	bool retflag;
 };
