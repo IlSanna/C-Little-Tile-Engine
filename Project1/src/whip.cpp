@@ -52,6 +52,7 @@ void Whip::animationDone(std::string currentAnimation) {
 void Whip::handleEnemyCollisions(std::vector<Enemy*>& others, float elapsedTime) {
 	for (int i = 0; i < others.size(); i++) {
 		if (others.at(i)->getVulnerability()) {
+			//play sound
 			others.at(i)->takeDamage(1);
 		}
 	}

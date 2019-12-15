@@ -30,6 +30,7 @@ protected:
 	float _lastHitTime = 0;
 
 	bool _die;
+	AudioManager* _audioManager;
 };
 
 class Bat : public Enemy {

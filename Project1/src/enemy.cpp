@@ -1,5 +1,5 @@
 #include "../headers/enemy.h"
-
+#include "../headers/AudioManager.h"
 //Base enemy class
 Enemy::Enemy() {}
 
@@ -13,6 +13,7 @@ Enemy::Enemy(Graphics &graphics, std::string filePath, int sourceX, int sourceY,
 
 	_invincibilityTimer = Timer::Instance();
 	_lastHitTime = 0;
+	_audioManager = AudioManager::Instance();
 }
 
 void Enemy::update(int elapsedTime, Player &player) {
@@ -28,6 +29,7 @@ void Enemy::takeDamage(int value) {
 	_lastHitTime = _invincibilityTimer->DeltaTime();
 	if (_currentHealth <= 0) {
 		//die
+		_audioManager->PlaySFX("content/music/enemyDeath.wav");
 		_die = true;
 	}
 	else {

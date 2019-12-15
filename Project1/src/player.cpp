@@ -212,7 +212,7 @@ void Player::handleEnemyCollisions(std::vector<Enemy*>& others,float elapsedTime
 		_audioManager->PlaySFX("content/music/Being_Hit.wav");
 		_health--;
 	}
-	std::cout << " health: " << _health << std::endl;
+	std::cout << "health: " << _health << std::endl;
 	SDL_SetTextureAlphaMod(_spriteSheet, Uint8(175));
 }
 
