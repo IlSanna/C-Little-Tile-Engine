@@ -22,7 +22,7 @@ void Game::gameLoop() {
 
 	_assetManager = AssetManager::Instance();
 	_audioManager = AudioManager::Instance();
-	_audioManager->PlayMusic("content/music/ostCastlevania.wav");
+	_audioManager->PlayMusic("content/music/ostCastlevania.ogg");
 
 	_level = Level("content/maps/MapN2.tmx", graphics);
 	_player = Player(graphics, _level.getPlayerSpawnPoint());
